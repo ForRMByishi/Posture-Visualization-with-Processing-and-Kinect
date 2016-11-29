@@ -14,7 +14,7 @@ void displayInfo(boolean active) {
   //image(kinect.depthImage(), 0, 0);
   
   
-  int howMany = context.getNumberOfUsers();
+  int howMany = kinect.getNumberOfUsers();
   textSize(12);
   fill(255);
   text("Number of users = " + howMany, textPosition, 50);  

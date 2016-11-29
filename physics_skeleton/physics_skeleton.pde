@@ -22,7 +22,7 @@ import SimpleOpenNI.*;
 
 /* Variables for Kinect Physics */
 // declare SimpleOpenNI object
-SimpleOpenNI context;
+//SimpleOpenNI context;
 SkeletonKinect  kinect; // for skeleton
 // declare BlobDetection object
 BlobDetection theBlobDetection;
@@ -59,13 +59,6 @@ ArrayList<CustomShape> polygons = new ArrayList<CustomShape>();
 // SQL communication variables
 PrintWriter joint_output;
 PVector head;
-
-// DepthMap3d variables
-// SimpleOpenNI context; // has been covered above in physics declarations
-float        zoomF =0.3f; //0.3f
-float        rotX = radians(180);  // by default rotate the hole scene 180deg around the x-axis, 
-// the data from openni comes upside down
-float        rotY = radians(0);
 
 // * Skeleton basis variables
 boolean visibleUser;
@@ -105,17 +98,18 @@ void setup() {
   /* setup for physics */
   
   // initialize SimpleOpenNI object
-  context = new SimpleOpenNI(this);
+  // kinect = new SimpleOpenNI(this);
+  kinect = new SkeletonKinect(this);
   
-  if (!context.enableDepth() || !context.enableUser()) { 
-    // if context.enableScene() returns false
+  if (!kinect.enableDepth() || !kinect.enableUser()) { 
+    // if kinect.enableScene() returns false
     // then the Kinect is not working correctly
     // make sure the green light is blinking
     println("Kinect not connected!"); 
     exit();
   } else {
     // mirror the image to be more intuitive
-    context.setMirror(true);
+    kinect.setMirror(true);
     // calculate the reScale value
     // currently it's rescaled to fill the complete width (cuts of top-bottom)
     // it's also possible to fill the complete height (leaves empty sides)
@@ -142,11 +136,6 @@ void setup() {
   }
   
   /* setup for Skeleton basis */
-  // * kinect.setMirror MUST BE BEFORE enableDepth and enableUser functions!!!
-  // kinect.setMirror(true);
-  // kinect.enableDepth();
-  // * Turn on user tracking
-  // kinect.enableUser();
 
   smooth();
   
@@ -183,9 +172,13 @@ void drawString(float x, float size, int cards) {
 void draw() {
   background(bgColor);
   // update the SimpleOpenNI object
-  context.update();
+  kinect.update();
+  //kinect.update();
+  // * Put detected users in an IntVector
+  IntVector userList = new IntVector();
+  kinect.getUsers(userList);
 
-  cam = context.userImage();
+  cam = kinect.userImage();
   cam.loadPixels();
   color black = color(0,0,0);
   // filter out grey pixels (mixed in depth image)
@@ -219,10 +212,6 @@ void draw() {
   // set the colors randomly every 240th frame
   setRandomColors(240);
 
-  kinect.update();
-  // * Put detected users in an IntVector
-  IntVector userList = new IntVector();
-  kinect.getUsers(userList);
 
   // * Search for an user and give him a UserId
   for (int i=0; i < userList.size (); i++) {
@@ -283,7 +272,7 @@ void updateAndDrawBox2D() {
   }
   // take one step in the box2d physics world
   box2d.step();
- 
+  
   // center and reScale from Kinect to custom dimensions
   translate(0, (height-kinectHeight*reScale)/2);
   scale(reScale);
@@ -298,8 +287,6 @@ void updateAndDrawBox2D() {
   for (int i=polygons.size()-1; i>=0; i--) {
     CustomShape cs = polygons.get(i);
     // if the shape is off-screen remove it (see class for more info)
-    
-    
     if (cs.done()) {
       polygons.remove(i);
     // otherwise update (keep shape outside person) and display (circle or polygon)

@@ -45,10 +45,10 @@ void drawLimbs(int userId, int limbID1, int limbID2) {
 
 
   // * Translation of kinect proportion to fullscreen proportions
-  float limb1X = map(convertedJoint1.x, 0, 640, 0, width);
-  float limb1Y = map(convertedJoint1.y, 0, 480, 0, height);
-  float limb2X = map(convertedJoint2.x, 0, 640, 0, width);
-  float limb2Y = map(convertedJoint2.y, 0, 480, 0, height);
+  float limb1X = map(convertedJoint1.x, 0, 640, 0, width/reScale);
+  float limb1Y = map(convertedJoint1.y, 0, 480, 0, height/reScale);
+  float limb2X = map(convertedJoint2.x, 0, 640, 0, width/reScale);
+  float limb2Y = map(convertedJoint2.y, 0, 480, 0, height/reScale);
   
 
 /* Graphic stuff (actually, draw the line from a joint to another)
@@ -77,13 +77,16 @@ void drawJoint(int userId, int jointID) {
   kinect.convertRealWorldToProjective(joint, convertedJoint);
 
 // * Translation of kinect proportion to fullscreen proportions
-  float jointX = map(convertedJoint.x, 0, 640, 0, width);
-  float jointY = map(convertedJoint.y, 0, 480, 0, height);
+  float jointX = map(convertedJoint.x, 0, 640, 0, width/reScale);
+  float jointY = map(convertedJoint.y, 0, 480, 0, height/reScale);
 
 // * Graphic stuff 
   noStroke();
   fill(255);
   ellipse(jointX, jointY, 25, 25);
+  
+  //translate(0, (height-kinectHeight*reScale)/2);
+  //scale(reScale);
 
 }
 
@@ -103,14 +106,15 @@ void drawJoint(int userId, int jointID) {
   kinect.convertRealWorldToProjective(head, convertedHead);
 
 // * Translation of kinect proportion to fullscreen proportions
-  float headx = map(convertedHead.x, 0, 640, 0, width);
-  float heady = map(convertedHead.y, 0, 480, 0, height);
+  float headx = map(convertedHead.x, 0, 640, 0, width/reScale);
+  float heady = map(convertedHead.y, 0, 480, 0, height/reScale);
 
 // * Graphic stuff 
   strokeWeight(5);
   noFill();
   ellipseMode(CENTER);
   ellipse(headx, heady, 70, 70);
+  
 
 }
 
@@ -146,6 +150,7 @@ void drawSkeleton(int userId) {
   drawLimbs(userId, SimpleOpenNI.SKEL_RIGHT_HIP, SimpleOpenNI.SKEL_LEFT_HIP);
   
   drawHead(userId);
+ 
 
   /* * DRAW EACH JOINTS INDIVIDUALLY
 
