@@ -105,7 +105,7 @@ void setup() {
   kinect = new SkeletonKinect(this);
   
   /* set up info display */
-  logo = loadShape("logo.svg");
+  logo = loadShape("logo.svg"); // width 100, height 125
   spine = loadShape("spine.svg");
   
   /* set up display */
@@ -250,7 +250,7 @@ void draw() {
   }
 
   // * Set to false to turn off the debugging informations
-  displayInfo(true);
+  displayInfo(false);
 
   // * Display project info
   draw_logo();
