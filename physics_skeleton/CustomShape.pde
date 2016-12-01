@@ -45,7 +45,7 @@ class CustomShape {
       // box2d polygon shape
       PolygonShape sd = new PolygonShape();
       // toxiclibs polygon creator (triangle, square, etc)
-      toxiPoly = new Circle(random(5, 20)).toPolygon2D(int(random(3, 6)));
+      toxiPoly = new Circle(random(4, 7)).toPolygon2D(int(random(4, 7)));
       // place the toxiclibs polygon's vertices into a vec2d array
       Vec2[] vertices = new Vec2[toxiPoly.getNumPoints()];
 

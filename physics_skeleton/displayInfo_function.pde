@@ -1,10 +1,19 @@
-/* *-*-*-*-*-* DEBUGGING INFORMATIONS *-*-*-*-*-* 
+/* *-*-*-*-*-* DEBUGGING INFORMATIONS *-*-*-*-*-* */
 
-* Display all informations you need in order to try and debug your code
 
-*/
+void draw_logo(){
+  shape(logo,20,20,15,15);
+  translate(30, 10);
+  textFont(title_font);
+  fill(255);
+  text("spine coach", -textWidth("spine coach"), 0);
+}
+
+
+/* Display  informations to debug */
  
 void displayInfo(boolean active) {
+  
 
   if(active == true) {
 
@@ -12,19 +21,23 @@ void displayInfo(boolean active) {
  * (except if you set.mirror(true), but the skeleton will be mirrored instead!)
 */
   //image(kinect.depthImage(), 0, 0);
-  
+  //int[] depth = kinect.getRawDepth();
+  //println(depth);
   
   int howMany = kinect.getNumberOfUsers();
+  textFont(f);
   textSize(12);
   fill(255);
   text("Number of users = " + howMany, textPosition, 50);  
   
   if(visibleUser) {
+  textFont(f);
   textSize(12);
   fill(175, 200, 255);
   text("Someone is in front of the Kinect", textPosition, 100);
   } else {
-    textSize(16);
+    textFont(f);
+    textSize(12);
     fill(255, 100, 0);
     text("Nobody is in front of the Kinect...", textPosition, 100);
     }
@@ -33,7 +46,8 @@ void displayInfo(boolean active) {
 
 void displaySuccess(boolean active) {
 if(active == true) {
-  textSize(16);
+  textFont(f);
+  textSize(12);
   fill(0, 255, 0);
   text("Tracking successful !", textPosition, 150);
   }
@@ -41,7 +55,8 @@ if(active == true) {
 
 void displayError(boolean active) {
 if(active == true) {
-  textSize(16);
+  textFont(f);
+  textSize(12);
   fill(255, 0, 0);
   text("Nobody is tracked...", textPosition, 150);
   }
