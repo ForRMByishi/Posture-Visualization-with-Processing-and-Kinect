@@ -15,12 +15,16 @@ This is part of a class project for 15-821 Mobile and Pervasive computing at Car
   - [Toxiclibs](http://toxiclibs.org/)
 - [D3.js](d3js.org) for website visualization
 
+## Directory
+- physics_skeleton: processing sketches for real-time posture visualization
+- website: compainion website for longitudinal posture visualization and analysis
+
 ## Credits
 - **Creator**: Qian Yang ([:house:](http://yang-qian.github.io));
 - **Advisors**: Asim Smailagic, Dan Siewiorek; :clap::clap:
-- **Collaborators**: Kyuin Lee ([:mailbox_with_no_mail:](mailto:kyuinl@andrew.cmu.edu)), Raghu Mulukutla([:mailbox_with_no_mail:](mailto:raghu94@cmu.edu));
+- **Collaborators**: Kyuin Lee ([:speech_balloon:](mailto:kyuinl@andrew.cmu.edu)), Raghu Mulukutla([:speech_balloon:](mailto:raghu94@cmu.edu));
 
 ## References
-- skeleton_basis by Antoine Puel (http:/antoine.cool)
-- [Kinect Physics Example](https://github.com/msp/CANKinectPhysics) by Amnon Owed, edited by Arindam Sen
+- [Kinect skeleton](https://github.com/antoine1000/kinect-skeleton) by Antoine Puel
+- [Kinect physics example](https://github.com/msp/CANKinectPhysics) by Amnon Owed, edited by Arindam Sen
 - Wblut library example [Creating a point cloud with ArrayList](http://www.wblut.com/tutorials/processing/creating-a-point-cloud-with-arraylist/)
