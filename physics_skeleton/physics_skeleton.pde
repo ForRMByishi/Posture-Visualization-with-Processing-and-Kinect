@@ -1,12 +1,8 @@
 
 /* 
- 
- - Qian Yang (qyang1@cs.cmu.edu)
- - Class Project for Carnegie Mellon University 15-821 Mobile and Pervasive Computing
- - This sketch references:
- >> Antoine Puel's script skeleton_basis (http:/antoine.cool)
- >> Kinect Physics Example by Amnon Owed, edited by Arindam Sen
- 
+
+Qian Yang (qyang1@cs.cmu.edu)
+
  */
 
 import processing.opengl.*; // opengl
@@ -20,6 +16,7 @@ import org.jbox2d.dynamics.joints.*;
 import org.jbox2d.common.*; // jbox2d
 import org.jbox2d.dynamics.*; // jbox2d
 import ddf.minim.*; // for touch
+import org.gicentre.utils.stat.*; // for static chart
 
 /* Variables for info display */
 PShape logo;
@@ -27,6 +24,8 @@ PShape spine;
 PFont title_font;
 PFont f;
 
+/* Variables for static charts */
+BarChart barChart;
 
 /* Variables for Kinect Physics */
 // declare SimpleOpenNI object
@@ -63,11 +62,28 @@ Box2DProcessing box2d;
 // list to hold all the custom shapes (circles, polygons)
 ArrayList<CustomShape> polygons = new ArrayList<CustomShape>();
 
-
 /* Variables for Skeleton */
 // SQL communication variables
 PrintWriter joint_output;
 PVector head;
+
+PVector converted_joint_from_limbID;
+PVector[] all_converted_joints = new PVector[15]; // an array of 15 joints' converted coordinates, which are...
+/*all_converted_joints[0] = new PVector(); // head
+all_converted_joints[1] = new PVector(); // neck
+all_converted_joints[2] = new PVector(); // torso
+all_converted_joints[3] = new PVector(); // left_shoulder
+all_converted_joints[4] = new PVector(); // right_shoulder
+all_converted_joints[5] = new PVector(); // left_elbow
+all_converted_joints[6] = new PVector(); // right_elbow
+all_converted_joints[7] = new PVector(); // left_hand
+all_converted_joints[8] = new PVector(); // right_hand
+all_converted_joints[9] = new PVector(); // left_hip
+all_converted_joints[10] = new PVector(); // right_hip
+all_converted_joints[11] = new PVector(); // left_knee
+all_converted_joints[12] = new PVector(); // right_knee
+all_converted_joints[13] = new PVector(); // left_feet
+all_converted_joints[14] = new PVector(); // right_feet*/
 
 // * Skeleton basis variables
 boolean visibleUser;
@@ -90,6 +106,9 @@ float s = 1;
 // used for edge detection
 boolean wasJustInBox = false;
 
+/* Variables for static charts */
+ArrayList<PVector> points;
+
 // * Enable FullScreen 
 boolean sketchFullScreen() {
   return false;
@@ -100,7 +119,10 @@ void setup() {
 
   //size(1024, 768, OPENGL);
   size(1024, 768, P3D);
-
+  
+  /* set up static charts */
+  setup_bar_chart();
+  
   // initialize SimpleOpenNI object
   kinect = new SkeletonKinect(this);
   
@@ -111,28 +133,24 @@ void setup() {
   /* set up display */
   f = loadFont("Menlo-Regular-12.vlw");
   title_font = loadFont("FiraSans-Hair-60.vlw");
-
-  /* set up SQL data communication */
-  // Create a new file in the sketch directory
-  // join dict reference: http://www.leondangio.net/masters-thesis/masters-thesis-data-acquisition/masters-thesis-data-acquisition-working-with-kinect-skeleton-data/
+  
+  // set up corrdinates export to a csv file
   joint_output = createWriter("skeleton_points.csv"); 
-  joint_output.println("head, neck, torso, left_shoulder, right_shoulder,left_elbow, right_elbow, left_hand, right_hand, left_hip, right_hip, left_knee, right_knee, left_feet, right_feet");
+  joint_output.print("head_x, head_y, head_z, neck_x, neck_y, neck_z, torso_x, torso_y, torso_z, left_shoulder_x, left_shoulder_y, left_shoulder_z, right_shoulder_x,right_shoulder_y, right_shoulder_z,");
+  joint_output.print("left_elbow_x, left_elbow_y, left_elbow_z, right_elbow_x, right_elbow_y, right_elbow_z, left_hand_x, left_hand_y, left_hand_z, right_hand_x, right_hand_y, right_hand_z, left_hip_x, left_hip_y, left_hip_z, right_hip_x, right_hip_y, right_hip_z,");
+  joint_output.print("left_knee_x,left_knee_y,left_knee_z, right_knee_x, right_knee_y, right_knee_z, left_feet_x, left_feet_y, left_feet_z, right_feet_x, right_feet_y, right_feet_z\n");
 
   /* set up kinect physics */
   if (!kinect.enableDepth() || !kinect.enableUser()) { 
-    // if kinect.enableScene() returns false
-    // then the Kinect is not working correctly
-    // make sure the green light is blinking
     println("Kinect not connected!"); 
     exit();
   } else {
     // mirror the image to be more intuitive
     kinect.setMirror(false);
     // calculate the reScale value
-    // currently it's rescaled to fill the complete width (cuts of top-bottom)
-    // it's also possible to fill the complete height (leaves empty sides)
+    // currently it's rescaled to to fill the complete height (leaves empty sides)
     reScale = (float) height / kinectHeight;
-    // create a smaller blob image for speed and efficiency
+    
     blobs = createImage(kinectWidth/3, kinectHeight/3, RGB);
     // initialize blob detection object to the blob image dimensions
     theBlobDetection = new BlobDetection(blobs.width, blobs.height);
@@ -187,10 +205,11 @@ void drawString(float x, float size, int cards) {
 
 void draw() {
   background(bgColor);
+  
 
   // update the SimpleOpenNI object
   kinect.update();
-  //kinect.update();
+  
   // * Put detected users in an IntVector
   IntVector userList = new IntVector();
   kinect.getUsers(userList);
@@ -236,6 +255,7 @@ void draw() {
     // * For every user, draw the skeleton
     if (kinect.isTrackingSkeleton(userId)) {
       stroke(userColor[ randomColor ] );
+      kinect.get_all_joints(userId);
       kinect.drawSkeleton(userId);
       // * Set to false to turn off success tracking message      
       displaySuccess(true);
@@ -246,14 +266,15 @@ void draw() {
       randomColor = (int)random(0, userColor.length);
     }
 
-    print_joints_to_csv();
+    
   }
 
   // * Set to false to turn off the debugging informations
   displayInfo(false);
-
-  // * Display project info
   draw_logo();
+  
+  // draw the static chart
+  barChart.draw(20,40,100,100);
 
   //saveFrame("output-####.png");
   //touchbutton();

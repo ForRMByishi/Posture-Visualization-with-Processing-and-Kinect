@@ -14,28 +14,47 @@ private class SkeletonKinect extends SimpleOpenNI {
 
   /* Basic Methods */
 
+  PVector converted_joint_from_limbID(int userId, int limbID) {
+    PVector joint = new PVector();
+    float limb = kinect.getJointPositionSkeleton(userId, limbID, joint);
+    PVector convertedJoint = new PVector();
+    kinect.convertRealWorldToProjective(joint, convertedJoint);
+    return convertedJoint;
+  }
+
+  void get_all_joints(int userId) {
+    all_converted_joints[0] = converted_joint_from_limbID(userId, SimpleOpenNI.SKEL_HEAD);
+    all_converted_joints[1] = converted_joint_from_limbID(userId, SimpleOpenNI.SKEL_NECK);
+    all_converted_joints[2] = converted_joint_from_limbID(userId, SimpleOpenNI.SKEL_TORSO);
+    all_converted_joints[3] = converted_joint_from_limbID(userId, SimpleOpenNI.SKEL_LEFT_SHOULDER);
+    all_converted_joints[4] = converted_joint_from_limbID(userId, SimpleOpenNI.SKEL_RIGHT_SHOULDER);
+    all_converted_joints[5] = converted_joint_from_limbID(userId, SimpleOpenNI.SKEL_LEFT_ELBOW);
+    all_converted_joints[6] = converted_joint_from_limbID(userId, SimpleOpenNI.SKEL_RIGHT_ELBOW);
+    all_converted_joints[7] = converted_joint_from_limbID(userId, SimpleOpenNI.SKEL_LEFT_HAND);
+    all_converted_joints[8] = converted_joint_from_limbID(userId, SimpleOpenNI.SKEL_RIGHT_HAND);
+    all_converted_joints[9] = converted_joint_from_limbID(userId, SimpleOpenNI.SKEL_LEFT_KNEE);
+    all_converted_joints[10] = converted_joint_from_limbID(userId, SimpleOpenNI.SKEL_RIGHT_KNEE);
+    all_converted_joints[11] = converted_joint_from_limbID(userId, SimpleOpenNI.SKEL_LEFT_HIP);  
+    all_converted_joints[12] = converted_joint_from_limbID(userId, SimpleOpenNI.SKEL_RIGHT_HIP);  
+    all_converted_joints[13] = converted_joint_from_limbID(userId, SimpleOpenNI.SKEL_LEFT_FOOT);
+    all_converted_joints[14] = converted_joint_from_limbID(userId, SimpleOpenNI.SKEL_RIGHT_FOOT);
+
+    export(all_converted_joints);
+  }
+
+
+
   /* ----------------------------*-*-*- drawLimbs function -*-*-*---------------------------- */
   /* Create a line between two joints */
 
   // * 3 arguments --> userId, 1st limb and 2nd limb
   void drawLimbs(int userId, int limbID1, int limbID2) {
 
-    PVector joint1 = new PVector();
-    PVector joint2 = new PVector();
-    float limb1 = kinect.getJointPositionSkeleton(userId, limbID1, joint1);
-    float limb2 = kinect.getJointPositionSkeleton(userId, limbID2, joint2);
-
-    PVector convertedJoint1 = new PVector();
-    PVector convertedJoint2 = new PVector();
-    kinect.convertRealWorldToProjective(joint1, convertedJoint1);
-    kinect.convertRealWorldToProjective(joint2, convertedJoint2);
-
     // * Translation of kinect proportion to fullscreen proportions
-    float limb1X = map(convertedJoint1.x, 0, 640, 0, width/reScale);
-    float limb1Y = map(convertedJoint1.y, 0, 480, 0, height/reScale);
-    float limb2X = map(convertedJoint2.x, 0, 640, 0, width/reScale);
-    float limb2Y = map(convertedJoint2.y, 0, 480, 0, height/reScale);
-
+    float limb1X = map(converted_joint_from_limbID(userId, limbID1).x, 0, 640, 0, width/reScale);
+    float limb1Y = map(converted_joint_from_limbID(userId, limbID1).y, 0, 480, 0, height/reScale);
+    float limb2X = map(converted_joint_from_limbID(userId, limbID2).x, 0, 640, 0, width/reScale);
+    float limb2Y = map(converted_joint_from_limbID(userId, limbID2).y, 0, 480, 0, height/reScale);
 
     /* draw the line from a joint to another*/
     stroke(getRandomColor());
@@ -47,21 +66,11 @@ private class SkeletonKinect extends SimpleOpenNI {
   /* ----------------------------*-*-*- drawJoint function -*-*-*---------------------------- 
    
    * Get each joint position, create an ellipse at this position */
-
   void drawJoint(int userId, int jointID) {
 
-    PVector joint = new PVector();
-    float confidence = kinect.getJointPositionSkeleton(userId, jointID, joint);
-    if (confidence < 0.5) {
-      return;
-    }
-
-    PVector convertedJoint = new PVector();
-    kinect.convertRealWorldToProjective(joint, convertedJoint);
-
     // * Translation of kinect proportion to fullscreen proportions
-    float jointX = map(convertedJoint.x, 0, 640, 0, width/reScale);
-    float jointY = map(convertedJoint.y, 0, 480, 0, height/reScale);
+    float jointX = map(converted_joint_from_limbID(userId, jointID).x, 0, 640, 0, width/reScale);
+    float jointY = map(converted_joint_from_limbID(userId, jointID).y, 0, 480, 0, height/reScale);
 
     // * Draw the joints
     noStroke();
@@ -72,24 +81,16 @@ private class SkeletonKinect extends SimpleOpenNI {
 
   /* ----------------------------*-*-*- drawHeadfunction -*-*-*---------------------------- 
    
-   * Display the head with an ellipse (you can change it by whatever you want) 
+   * Display the head with an ellipse
    
    */
-
   void drawHead(int userId) {
-
-    // * Track the head
-    PVector head = new PVector();
-    kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_HEAD, head);
-    PVector convertedHead = new PVector();
-    kinect.convertRealWorldToProjective(head, convertedHead);
-
     // * Translation of kinect proportion to fullscreen proportions
-    float headx = map(convertedHead.x, 0, 640, 0, width/reScale);
-    float heady = map(convertedHead.y, 0, 480, 0, height/reScale);
+    float headx = map(converted_joint_from_limbID(userId, SimpleOpenNI.SKEL_HEAD).x, 0, 640, 0, width/reScale);
+    float heady = map(converted_joint_from_limbID(userId, SimpleOpenNI.SKEL_HEAD).y, 0, 480, 0, height/reScale);
 
     // * Graphic stuff 
-    strokeWeight(5);
+    strokeWeight(1);
     noFill();
     ellipseMode(CENTER);
     ellipse(headx, heady, 70, 70);
@@ -99,29 +100,10 @@ private class SkeletonKinect extends SimpleOpenNI {
   /* ----------------------------*-*-*- drawSpine function -*-*-*---------------------------- */
 
   void draw_spine_between_joint_IDs(int userId, int jointID1, int jointID2, int seg_num) {
-
-    PVector joint1 = new PVector();
-    float confidence1 = kinect.getJointPositionSkeleton(userId, jointID1, joint1);
-    if (confidence1 < 0.5) {
-      return;
-    }
-
-    PVector joint2 = new PVector();
-    float confidence2 = kinect.getJointPositionSkeleton(userId, jointID2, joint2);
-    if (confidence2 < 0.5) {
-      return;
-    }
-
-    PVector convertedJoint1 = new PVector();
-    PVector convertedJoint2 = new PVector();
-    kinect.convertRealWorldToProjective(joint1, convertedJoint1);
-    kinect.convertRealWorldToProjective(joint2, convertedJoint2);
-
-    draw_spine_between_joints(userId, convertedJoint1, convertedJoint2, seg_num);
+    draw_spine_between_joints(userId, converted_joint_from_limbID(userId, jointID1), converted_joint_from_limbID(userId, jointID2), seg_num);
   }
 
   void draw_spine_between_joints(int userId, PVector convertedJoint1, PVector convertedJoint2, int seg_num) {
-
     // * Translation of kinect proportion to fullscreen proportions
     float limb1X = map(convertedJoint1.x, 0, 640, 0, width/reScale);
     float limb1Y = map(convertedJoint1.y, 0, 480, 0, height/reScale);
@@ -132,44 +114,32 @@ private class SkeletonKinect extends SimpleOpenNI {
 
     PVector spineVector = new PVector((limb2X-limb1X)/seg_num, (limb2Y-limb1Y)/seg_num, (limb2Z - limb1Z)/seg_num);
     for (int n=0; n < seg_num; n++) {
-      shape(spine, limb1X + (spineVector.x * n), limb1Y + (spineVector.y * n), limb1Z*20 + (spineVector.z * n *20), limb1Z*10 + (spineVector.z * n * 10));
+      shape(spine, limb1X + (spineVector.x * n), limb1Y + (spineVector.y * n), limb1Z*22 + (spineVector.z * n *22), limb1Z*12 + (spineVector.z * n * 12));
     }
   }
 
+
+  /* ----------------------------*-*-*- middle joint (i.e. middle hip) function -*-*-*---------------------------- */
+  // if SimpleOpenNI returns only left and right joints, average and convert the corrdinates
   PVector mid_joint(int userId, int left_joint_ID, int right_joint_ID) {
-
+    PVector convertedleft = converted_joint_from_limbID(userId, left_joint_ID);
+    PVector convertedright = converted_joint_from_limbID(userId, right_joint_ID);
     PVector mid = new PVector();
-    PVector left = new PVector();
-    PVector right = new PVector();
-    kinect.getJointPositionSkeleton(userId, left_joint_ID, left);
-    kinect.getJointPositionSkeleton(userId, right_joint_ID, right);
-    PVector convertedleft = new PVector();
-    PVector convertedright = new PVector();
-    kinect.convertRealWorldToProjective(left, convertedleft);
-    kinect.convertRealWorldToProjective(right, convertedright);
-
     mid.set((convertedleft.x + convertedright.x)/2, (convertedleft.y + convertedright.y)/2, (convertedleft.z + convertedright.z)/2);
-    println(left, right, mid);
 
     return mid;
   }
 
+  // otherwise, convert the original coordinates
   PVector joint_get_convert(int userId, int joint_ID) {
     return mid_joint(userId, joint_ID, joint_ID);
   }
 
 
-  /* ----------------------------*-*-*- drawSkeleton function -*-*-*---------------------------- 
-   
-   * Note : drawLimbs & drawJoint are designed for drawing each joint indivdually
-   * drawSkeleton is the function which draw all the limbs/joints
-   * = draw every joint and limbs with drawLimbs & drawJoint functions
-   
-   */
+  /* ----------------------------*-*-*- drawSkeleton function -*-*-*----------------------------  */
   void drawSkeleton(int userId) {
 
     // * DRAW EACH LIMBS INDVIDUALLY
-
     PVector mid_hip_joint = mid_joint(userId, SimpleOpenNI.SKEL_LEFT_HIP, SimpleOpenNI.SKEL_RIGHT_HIP);
 
     draw_spine_between_joint_IDs(userId, SimpleOpenNI.SKEL_HEAD, SimpleOpenNI.SKEL_NECK, 7); // * head to neck: seg_num = 7
@@ -195,7 +165,6 @@ private class SkeletonKinect extends SimpleOpenNI {
 
     drawHead(userId);
 
-
     /* * DRAW EACH JOINTS INDIVIDUALLY * */
 
     drawJoint(userId, SimpleOpenNI.SKEL_HEAD);
@@ -218,27 +187,14 @@ private class SkeletonKinect extends SimpleOpenNI {
   }
 }
 
-void print_joints_to_csv() {
-  // * Export join coordinates to joint_output.txt
-  // Scehma: head, neck, torso, left_shoulder, right_shoulder, left_elbow, right_elbow,
-  // left_hand, right_hand, left_hip, right_hip, left_knee, right_knee, left_feet, right_feet.
-  joint_output.println(getJoint(1, SimpleOpenNI.SKEL_HEAD) + ","
-    + getJoint(1, SimpleOpenNI.SKEL_NECK) + ","
-    + getJoint(1, SimpleOpenNI.SKEL_TORSO) + ","
-    + getJoint(1, SimpleOpenNI.SKEL_LEFT_SHOULDER) + ","
-    + getJoint(1, SimpleOpenNI.SKEL_RIGHT_SHOULDER) + ","
-    + getJoint(1, SimpleOpenNI.SKEL_LEFT_ELBOW) + ","
-    + getJoint(1, SimpleOpenNI.SKEL_RIGHT_ELBOW) + ","
-    + getJoint(1, SimpleOpenNI.SKEL_LEFT_HAND) + ","
-    + getJoint(1, SimpleOpenNI.SKEL_RIGHT_HAND) + ","
-    + getJoint(1, SimpleOpenNI.SKEL_LEFT_HIP) + ","
-    + getJoint(1, SimpleOpenNI.SKEL_RIGHT_HIP) + ","
-    + getJoint(1, SimpleOpenNI.SKEL_LEFT_KNEE) + ","
-    + getJoint(1, SimpleOpenNI.SKEL_RIGHT_KNEE) + ","
-    + getJoint(1, SimpleOpenNI.SKEL_LEFT_FOOT) + ","
-    + getJoint(1, SimpleOpenNI.SKEL_RIGHT_FOOT)
-    );
-  //joint_output.println(getJoint(1, SimpleOpenNI.SKEL_RIGHT_COLLAR));
+void export(PVector[] jointList) {
+  // * Export join coordinates to joint_output csv file
+  FloatList temp = new FloatList();
+
+  for (int i=0; i < jointList.length; i++) {
+    joint_output.print(jointList[i].x + "," + jointList[i].y + "," + jointList[i].x + ",");
+  }
+  joint_output.print("\n");
   joint_output.flush();
 }
 

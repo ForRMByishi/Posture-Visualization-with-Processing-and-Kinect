@@ -18,8 +18,6 @@ void draw_logo(){
 /* Display  informations to debug */
  
 void displayInfo(boolean active) {
-  
-
   if(active == true) {
 
 /* * Display the depth image (great for debugging purpose, but the image is mirrored!)
