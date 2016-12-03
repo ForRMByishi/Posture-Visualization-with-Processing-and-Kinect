@@ -1,8 +1,8 @@
 
 /* 
-
-Qian Yang (qyang1@cs.cmu.edu)
-
+ 
+ Qian Yang (qyang1@cs.cmu.edu)
+ 
  */
 
 import processing.opengl.*; // opengl
@@ -18,6 +18,10 @@ import org.jbox2d.dynamics.*; // jbox2d
 import ddf.minim.*; // for touch
 import org.gicentre.utils.stat.*; // for static chart
 
+int timer;
+int touch_timer;
+int timeIntervalFlag = 3000; // 3 seconds because we are working with millis
+
 /* Variables for info display */
 PShape logo;
 PShape spine;
@@ -25,7 +29,8 @@ PFont title_font;
 PFont f;
 
 /* Variables for static charts */
-BarChart barChart;
+BarChart barChart; //static barchart
+ArrayList<PVector> side_view_points; // for array point cloud
 
 /* Variables for Kinect Physics */
 // declare SimpleOpenNI object
@@ -69,21 +74,6 @@ PVector head;
 
 PVector converted_joint_from_limbID;
 PVector[] all_converted_joints = new PVector[15]; // an array of 15 joints' converted coordinates, which are...
-/*all_converted_joints[0] = new PVector(); // head
-all_converted_joints[1] = new PVector(); // neck
-all_converted_joints[2] = new PVector(); // torso
-all_converted_joints[3] = new PVector(); // left_shoulder
-all_converted_joints[4] = new PVector(); // right_shoulder
-all_converted_joints[5] = new PVector(); // left_elbow
-all_converted_joints[6] = new PVector(); // right_elbow
-all_converted_joints[7] = new PVector(); // left_hand
-all_converted_joints[8] = new PVector(); // right_hand
-all_converted_joints[9] = new PVector(); // left_hip
-all_converted_joints[10] = new PVector(); // right_hip
-all_converted_joints[11] = new PVector(); // left_knee
-all_converted_joints[12] = new PVector(); // right_knee
-all_converted_joints[13] = new PVector(); // left_feet
-all_converted_joints[14] = new PVector(); // right_feet*/
 
 // * Skeleton basis variables
 boolean visibleUser;
@@ -101,7 +91,7 @@ int randomColor = 0;
 /* Variables for touch button */
 
 int boxSize = 150;
-PVector boxCenter = new PVector(0, 0, 600);
+PVector boxCenter = new PVector(0, 0, 1000);
 float s = 1;
 // used for edge detection
 boolean wasJustInBox = false;
@@ -116,24 +106,26 @@ boolean sketchFullScreen() {
 
 void setup() {
   println("SETTING UP...");
+  timer = millis();
 
   //size(1024, 768, OPENGL);
   size(1024, 768, P3D);
-  
+
   /* set up static charts */
   setup_bar_chart();
-  
+  side_view_points = new ArrayList<PVector>(); // for array point cloud
+
   // initialize SimpleOpenNI object
   kinect = new SkeletonKinect(this);
-  
+
   /* set up info display */
   logo = loadShape("logo.svg"); // width 100, height 125
   spine = loadShape("spine.svg");
-  
+
   /* set up display */
   f = loadFont("Menlo-Regular-12.vlw");
   title_font = loadFont("FiraSans-Hair-60.vlw");
-  
+
   // set up corrdinates export to a csv file
   joint_output = createWriter("skeleton_points.csv"); 
   joint_output.print("head_x, head_y, head_z, neck_x, neck_y, neck_z, torso_x, torso_y, torso_z, left_shoulder_x, left_shoulder_y, left_shoulder_z, right_shoulder_x,right_shoulder_y, right_shoulder_z,");
@@ -150,7 +142,7 @@ void setup() {
     // calculate the reScale value
     // currently it's rescaled to to fill the complete height (leaves empty sides)
     reScale = (float) height / kinectHeight;
-    
+
     blobs = createImage(kinectWidth/3, kinectHeight/3, RGB);
     // initialize blob detection object to the blob image dimensions
     theBlobDetection = new BlobDetection(blobs.width, blobs.height);
@@ -205,11 +197,10 @@ void drawString(float x, float size, int cards) {
 
 void draw() {
   background(bgColor);
-  
 
   // update the SimpleOpenNI object
   kinect.update();
-  
+
   // * Put detected users in an IntVector
   IntVector userList = new IntVector();
   kinect.getUsers(userList);
@@ -265,8 +256,12 @@ void draw() {
       // * Each time the tracking is lost, change the random color value for the next tracking   
       randomColor = (int)random(0, userColor.length);
     }
+  }
 
-    
+  if ( millis() > timer + timeIntervalFlag ) {
+    timer = millis();
+    // do sth every 3 sec
+    //draw_side_view();
   }
 
   // * Set to false to turn off the debugging informations
@@ -274,50 +269,10 @@ void draw() {
   draw_logo();
   
   // draw the static chart
-  barChart.draw(20,40,100,100);
+  barChart.draw(20, 40, 100, 100);
+  
 
-  //saveFrame("output-####.png");
-  //touchbutton();
+  touchbutton();
 }
-
-void updateAndDrawBox2D() {
-  // if frameRate is sufficient, add a polygon and a circle with a random radius
-
-  if (frameRate > 30) {
-    CustomShape shape1 = new CustomShape(kinectWidth/2, -50, -1, BodyType.DYNAMIC) ;
-    CustomShape shape2 = new CustomShape(kinectWidth/2, -50, random(2.5, 20), BodyType.DYNAMIC);
-    polygons.add(shape1);
-    polygons.add(shape2);
-  }
-  // take one step in the box2d physics world
-  box2d.step();
-
-  // center and reScale from Kinect to custom dimensions
-  translate(0, (height-kinectHeight*reScale)/2);
-  scale(reScale);
-
-  // display the person's polygon  
-  noStroke();
-  fill(blobColor);
-  gfx.polygon2D(poly);
-
-  // display all the shapes (circles, polygons)
-  // go backwards to allow removal of shapes
-  for (int i=polygons.size ()-1; i>=0; i--) {
-    CustomShape cs = polygons.get(i);
-    // if the shape is off-screen remove it (see class for more info)
-    if (cs.done()) {
-      polygons.remove(i);
-      // otherwise update (keep shape outside person) and display (circle or polygon)
-    } else {
-      cs.update();
-      cs.display();
-    }
-  }
-}
-
-
-
-
 
 

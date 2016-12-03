@@ -2,13 +2,13 @@
 void touchbutton()
 {
   // load the color image from the Kinect
-  PImage rgbImage = kinect.rgbImage();
+  //PImage rgbImage = kinect.rgbImage();
 
   // prepare to draw centered in x-y
   // z axis adjustment
-  translate(width/2, height/2, -1000);
+  //translate(width/2, height/2, -1000);
   translate(0,0,s*-1000);
-  scale(s);
+  //scale(s);
 
   stroke(255);
   
@@ -23,17 +23,14 @@ void touchbutton()
     PVector currentPoint = depthPoints[i];
     
     // set the stroke color based on the color pixel
-    stroke(rgbImage.pixels[i]);
+    //stroke(rgbImage.pixels[i]);
     
     // The nested if statements inside of our loop 2
-    if (currentPoint.x > boxCenter.x - boxSize/2
-    && currentPoint.x < boxCenter.x + boxSize/2)
+    if (currentPoint.x > boxCenter.x - boxSize/2 && currentPoint.x < boxCenter.x + boxSize/2)
     {
-      if (currentPoint.y > boxCenter.y - boxSize/2
-      && currentPoint.y < boxCenter.y + boxSize/2)
+      if (currentPoint.y > boxCenter.y - boxSize/2 && currentPoint.y < boxCenter.y + boxSize/2)
       {
-        if (currentPoint.z > boxCenter.z - boxSize/2
-        && currentPoint.z < boxCenter.z + boxSize/2)
+        if (currentPoint.z > boxCenter.z - boxSize/2 && currentPoint.z < boxCenter.z + boxSize/2)
         {
           depthPointsInBox++;
         }
@@ -42,7 +39,6 @@ void touchbutton()
     point(currentPoint.x, currentPoint.y, currentPoint.z);
   }
   
-  println(depthPointsInBox);
   
   // set the box color's transparency
   // 0 is transparent, 1000 points is fully opaque red
@@ -57,4 +53,19 @@ void touchbutton()
   fill(255, 0, 0, boxAlpha);
   stroke(255, 0, 0);
   box(boxSize);
+  
+  println("depth", depthPointsInBox);
+  if (depthPointsInBox > 350){
+    touch_timer += 1;
+    println(">450");
+  } else {
+    println("cleared when timer is", touch_timer);
+    touch_timer = 0;
+  }
+  
+  if (touch_timer > 3){
+    touch_timer = 0;
+    println("triggered!");
+    link("http://www.google.com");
+  }
 }

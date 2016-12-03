@@ -14,14 +14,6 @@ private class SkeletonKinect extends SimpleOpenNI {
 
   /* Basic Methods */
 
-  PVector converted_joint_from_limbID(int userId, int limbID) {
-    PVector joint = new PVector();
-    float limb = kinect.getJointPositionSkeleton(userId, limbID, joint);
-    PVector convertedJoint = new PVector();
-    kinect.convertRealWorldToProjective(joint, convertedJoint);
-    return convertedJoint;
-  }
-
   void get_all_joints(int userId) {
     all_converted_joints[0] = converted_joint_from_limbID(userId, SimpleOpenNI.SKEL_HEAD);
     all_converted_joints[1] = converted_joint_from_limbID(userId, SimpleOpenNI.SKEL_NECK);
@@ -41,7 +33,6 @@ private class SkeletonKinect extends SimpleOpenNI {
 
     export(all_converted_joints);
   }
-
 
 
   /* ----------------------------*-*-*- drawLimbs function -*-*-*---------------------------- */
@@ -89,6 +80,7 @@ private class SkeletonKinect extends SimpleOpenNI {
     float headx = map(converted_joint_from_limbID(userId, SimpleOpenNI.SKEL_HEAD).x, 0, 640, 0, width/reScale);
     float heady = map(converted_joint_from_limbID(userId, SimpleOpenNI.SKEL_HEAD).y, 0, 480, 0, height/reScale);
 
+
     // * Graphic stuff 
     strokeWeight(1);
     noFill();
@@ -119,23 +111,6 @@ private class SkeletonKinect extends SimpleOpenNI {
   }
 
 
-  /* ----------------------------*-*-*- middle joint (i.e. middle hip) function -*-*-*---------------------------- */
-  // if SimpleOpenNI returns only left and right joints, average and convert the corrdinates
-  PVector mid_joint(int userId, int left_joint_ID, int right_joint_ID) {
-    PVector convertedleft = converted_joint_from_limbID(userId, left_joint_ID);
-    PVector convertedright = converted_joint_from_limbID(userId, right_joint_ID);
-    PVector mid = new PVector();
-    mid.set((convertedleft.x + convertedright.x)/2, (convertedleft.y + convertedright.y)/2, (convertedleft.z + convertedright.z)/2);
-
-    return mid;
-  }
-
-  // otherwise, convert the original coordinates
-  PVector joint_get_convert(int userId, int joint_ID) {
-    return mid_joint(userId, joint_ID, joint_ID);
-  }
-
-
   /* ----------------------------*-*-*- drawSkeleton function -*-*-*----------------------------  */
   void drawSkeleton(int userId) {
 
@@ -146,7 +121,7 @@ private class SkeletonKinect extends SimpleOpenNI {
     draw_spine_between_joint_IDs(userId, SimpleOpenNI.SKEL_NECK, SimpleOpenNI.SKEL_TORSO, 9);
     draw_spine_between_joints(userId, joint_get_convert(userId, SimpleOpenNI.SKEL_TORSO), mid_hip_joint, 7); 
 
-    //drawLimbs(userId, SimpleOpenNI.SKEL_HEAD, SimpleOpenNI.SKEL_NECK);
+    drawLimbs(userId, SimpleOpenNI.SKEL_HEAD, SimpleOpenNI.SKEL_NECK);
     drawLimbs(userId, SimpleOpenNI.SKEL_NECK, SimpleOpenNI.SKEL_LEFT_SHOULDER);
     drawLimbs(userId, SimpleOpenNI.SKEL_LEFT_SHOULDER, SimpleOpenNI.SKEL_LEFT_ELBOW);
     drawLimbs(userId, SimpleOpenNI.SKEL_LEFT_ELBOW, SimpleOpenNI.SKEL_LEFT_HAND);

@@ -7,8 +7,8 @@ userID and start pose detection. Input is userID
 ----------------------------------------------------------------*/
 void onNewUser(SimpleOpenNI curContext, int userId)
 {
-  println("onNewUser - userId: " + userId);
-  println("start tracking skeleton");
+  //println("onNewUser - userId: " + userId);
+  //println("start tracking skeleton");
 
   kinect.startTrackingSkeleton(userId);
 }
