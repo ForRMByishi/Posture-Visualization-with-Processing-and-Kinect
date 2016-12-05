@@ -4,13 +4,10 @@ void touchbutton()
   // load the color image from the Kinect
   //PImage rgbImage = kinect.rgbImage();
 
-  // prepare to draw centered in x-y
-  // z axis adjustment
+  // prepare to draw centered in x-y z axis adjustment
   //translate(width/2, height/2, -1000);
-  translate(0,0,s*-1000);
-  //scale(s);
-
-  stroke(255);
+  translate(100, 100, -1000);
+  //stroke(255);
   
   // get the depth data as 3D points
   PVector[] depthPoints = kinect.depthMapRealWorld(); 
@@ -52,7 +49,7 @@ void touchbutton()
   translate(boxCenter.x, boxCenter.y, boxCenter.z);
   fill(255, 0, 0, boxAlpha);
   stroke(255, 0, 0);
-  box(boxSize);
+  box(boxSize/5);
   
   println("depth", depthPointsInBox);
   if (depthPointsInBox > 350){
@@ -63,7 +60,7 @@ void touchbutton()
     touch_timer = 0;
   }
   
-  if (touch_timer > 3){
+  if (touch_timer > 5){
     touch_timer = 0;
     println("triggered!");
     link("http://www.google.com");

@@ -68,32 +68,28 @@ Box2DProcessing box2d;
 ArrayList<CustomShape> polygons = new ArrayList<CustomShape>();
 
 /* Variables for Skeleton */
-// SQL communication variables
+// csv export variables
 PrintWriter joint_output;
 PVector head;
 
+// * Skeleton basis variables
+boolean visibleUser;
 PVector converted_joint_from_limbID;
 PVector[] all_converted_joints = new PVector[15]; // an array of 15 joints' converted coordinates, which are...
 
-// * Skeleton basis variables
-boolean visibleUser;
+
 float textPosition;
-// - Array of color
 color[] userColor = new color[] { 
   color(255, 0, 0), 
   color(109, 57, 255), 
   color(0, 255, 0), 
   color(0, 0, 255)
 }; 
-
 int randomColor = 0;
 
 /* Variables for touch button */
-
 int boxSize = 150;
 PVector boxCenter = new PVector(0, 0, 1000);
-float s = 1;
-// used for edge detection
 boolean wasJustInBox = false;
 
 /* Variables for static charts */
@@ -109,7 +105,7 @@ void setup() {
   timer = millis();
 
   //size(1024, 768, OPENGL);
-  size(1024, 768, P3D);
+  size(1280, 900, P3D);
 
   /* set up static charts */
   setup_bar_chart();
@@ -270,9 +266,44 @@ void draw() {
   
   // draw the static chart
   barChart.draw(20, 40, 100, 100);
-  
 
   touchbutton();
 }
 
+void updateAndDrawBox2D() {
+  // if frameRate is sufficient, add a polygon and a circle with a random radius
+
+  if (frameRate > 30) {
+    CustomShape shape1 = new CustomShape(kinectWidth/2, -50, -1, BodyType.DYNAMIC) ;
+    CustomShape shape2 = new CustomShape(kinectWidth/2, -50, random(2.5, 20), BodyType.DYNAMIC);
+    polygons.add(shape1);
+    polygons.add(shape2);
+  }
+  // take one step in the box2d physics world
+  box2d.step();
+
+  // center and reScale from Kinect to custom dimensions
+  translate(0, (height-kinectHeight*reScale)/2);
+  scale(reScale);
+
+  // display the person's polygon  
+  stroke(153);
+  //noStroke();
+  fill(blobColor);
+  gfx.polygon2D(poly);
+
+  // display all the shapes (circles, polygons)
+  // go backwards to allow removal of shapes
+  for (int i=polygons.size ()-1; i>=0; i--) {
+    CustomShape cs = polygons.get(i);
+    // if the shape is off-screen remove it (see class for more info)
+    if (cs.done()) {
+      polygons.remove(i);
+      // otherwise update (keep shape outside person) and display (circle or polygon)
+    } else {
+      cs.update();
+      cs.display();
+    }
+  }
+}
 

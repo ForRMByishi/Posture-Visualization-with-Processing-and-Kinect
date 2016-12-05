@@ -10,7 +10,7 @@ void draw_logo(){
   
   textFont(title_font);
   textSize(8);
-  fill(getRandomColor());
+  //fill(getRandomColor());
   text("spine coach", 10, textWidth("spine coach"));
 }
 
