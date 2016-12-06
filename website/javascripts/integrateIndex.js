@@ -3617,7 +3617,7 @@ var demo = new Vue({
     self.displayDMem();
 
     setInterval(function () {
-      self.people_count = Math.floor( Math.random() * 2 ); // 0 or 1
+      self.people_count = Math.floor(Math.random() * 2); // 0 or 1
     }, 2000);
   }
 });

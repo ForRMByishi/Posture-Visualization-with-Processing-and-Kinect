@@ -1,255 +1,178 @@
 <!DOCTYPE html>
 <html lang='en'>
+
 <head>
-	<title>A Visualization System Prototype of Spinal Posture Monitoring System</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>A Visualization System Prototype of Spinal Posture Monitoring System</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href='./stylesheets/bootstrap.min.css'>
+    <link rel="stylesheet" type="text/css" href="./stylesheets/style.css"> </head>
+<!-- translate variable from database input -->
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    
+<!-- this function need to get integrated to IntegrateIndex.js -->
+    <!--
+<script type="text/javascript">
+    function () {
+        var slouching_db = {{people_count}};
+        if (slouching_db == 1){
+        $("#slouching").text("Slouching!");
+    } else {
+        $("#slouching").text("Good!");
+    }
+    };
+</script>
+-->
 
-	<link rel="stylesheet" type="text/css" href='./stylesheets/bootstrap.min.css'>
-	<link rel="stylesheet" type="text/css" href="./stylesheets/style.css">
-</head>
 <body id='table'>
-<div class='container'>
-	<div class="col-sm-12 col-md-12">
-		<img src="img/logo.png" alt="logo" height="80" style="padding:10px 0 10px"> 
-		<p></p>
-	</div>
-</div>
-
-<br>
-
-<div class='container'>
-<!--
-	<div class="col-sm-12 col-md-12">
-		<h3>SENSOR PART</h3>
-	</div> -->
-	<div class="col-sm-12 col-md-4">
-		<div class="panel panel-card people-panel">
-			<div class="panel-title">
-				<h5 class="no-margin m-b">slouching or not</h5>
-			</div>
-			<div class="panel-body">
-				<div id="sensor-moni-text" style="height:250px;">
-					<h1>{{people_count}}</h1>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class='col-sm-12 col-md-8'>
-		<div class="panel panel-card">
-			<div class="panel-title">
-				<h5 class='no-margin m-b'>Activeness Monitor</h5>
-			</div>
-			<div class="panel-body">
-				<div id="sensor-mem-area-d3" style="height:270px;"></div>
-			</div>
-		</div>
-	</div>
-
-<!-- ================================= coordinate points chart ================================= -->
-	<div class='col-sm-12 col-md-8'>
-		<div class="panel panel-card">
-			<div class="panel-title">
-				<h5 class='no-margin m-b'>Spinal Position Monitor</h5>
-			</div>
-            <!-- 3D coordinates
-            <div class="panel-body">
-                <div id="myDiv" style="height:370px;">
-                </div>  
-            </div> -->
-            
-            
-			<div class="panel-body">
-				<div class='col-xm-2 col-sm-2 col-md-2 panel-checkbox hidden-xs hidden-sm'>
-					<p>Spinal Segments:</p>
-					<form id='checkbox_opt'>
-						<input id="spinal_seg1" class="scatter_checkbox" type="checkbox" name="spinal_seg1" value="1" v-on="click:checkOpt" checked="true"/><text> head </text><br>
-						<input id="spinal_seg2" class="scatter_checkbox" type="checkbox" name="spinal_seg2" value="2" v-on="click:checkOpt" checked="true"/><text> neck </text><br>
-						<input id="spinal_seg3" class="scatter_checkbox" type="checkbox" name="spinal_seg3" value="3" v-on="click:checkOpt"/><text> torso </text><br>
-						<input id="spinal_seg4" class="scatter_checkbox" type="checkbox" name="spinal_seg4" value="4" v-on="click:checkOpt" checked="true"/><text> left shoulder </text><br>
-						<input id="spinal_seg5" class="scatter_checkbox" type="checkbox" name="spinal_seg5" value="5" v-on="click:checkOpt" checked="true"/><text> right shoulder </text><br>
-						<input id="spinal_seg6" class="scatter_checkbox" type="checkbox" name="spinal_seg6" value="6" v-on="click:checkOpt"/><text> left hip </text><br>
-						<input id="spinal_seg7" class="scatter_checkbox" type="checkbox" name="spinal_seg7" value="7" v-on="click:checkOpt"/><text> right hip </text><br>
-						<input id="spinal_seg8" class="scatter_checkbox" type="checkbox" name="spinal_seg8" value="8" v-on="click:checkOpt"/><text> left knee </text><br>
-						<input id="spinal_seg9" class="scatter_checkbox" type="checkbox" name="spinal_seg9" value="9" v-on="click:checkOpt" checked="true"/><text> right knee </text><br>
-						<input id="spinal_seg10" class="scatter_checkbox" type="checkbox" name="spinal_seg10" value="10" v-on="click:checkOpt"/><text> left foot </text><br>
-						<input id="spinal_seg11" class="scatter_checkbox" type="checkbox" name="spinal_seg11" value="11" v-on="click:checkOpt"/><text> right foot </text><br>
-					</form>
-				</div>
-
-				<div class='panel-checkbox-xs visible-xs-block visible-sm-block'>
-					<p>Spinal Segments:</p>
-					<form id='checkbox_opt'>
-						<input id="spinal_seg1" class="scatter_checkbox" type="checkbox" name="spinal_seg1" value="1" v-on="click:checkOpt" checked="true"/><text> head </text><br>
-						<input id="spinal_seg2" class="scatter_checkbox" type="checkbox" name="spinal_seg2" value="2" v-on="click:checkOpt" checked="true"/><text> neck </text><br>
-						<input id="spinal_seg3" class="scatter_checkbox" type="checkbox" name="spinal_seg3" value="3" v-on="click:checkOpt"/><text> torso </text><br>
-						<input id="spinal_seg4" class="scatter_checkbox" type="checkbox" name="spinal_seg4" value="4" v-on="click:checkOpt" checked="true"/><text> left shoulder </text><br>
-						<input id="spinal_seg5" class="scatter_checkbox" type="checkbox" name="spinal_seg5" value="5" v-on="click:checkOpt" checked="true"/><text> right shoulder </text><br>
-						<input id="spinal_seg6" class="scatter_checkbox" type="checkbox" name="spinal_seg6" value="6" v-on="click:checkOpt"/><text> left hip </text><br>
-						<input id="spinal_seg7" class="scatter_checkbox" type="checkbox" name="spinal_seg7" value="7" v-on="click:checkOpt"/><text> right hip </text><br>
-						<input id="spinal_seg8" class="scatter_checkbox" type="checkbox" name="spinal_seg8" value="8" v-on="click:checkOpt"/><text> left knee </text><br>
-						<input id="spinal_seg9" class="scatter_checkbox" type="checkbox" name="spinal_seg9" value="9" v-on="click:checkOpt" checked="true"/><text> right knee </text><br>
-						<input id="spinal_seg10" class="scatter_checkbox" type="checkbox" name="spinal_seg10" value="10" v-on="click:checkOpt"/><text> left foot </text><br>
-						<input id="spinal_seg11" class="scatter_checkbox" type="checkbox" name="spinal_seg11" value="11" v-on="click:checkOpt"/><text> right foot </text><br>
-					</form>
-				</div>
-
-				<div class='col-xm-12 col-sm-12 col-md-10 col-xs-12'>
-					<div id="sensor-docker-scatterplot-d3" style="width:100%;height:370px;"></div>
-				</div>
-			</div> 
-		</div>
-	</div>
-    
-<!-- ================================= pie chart ================================= -->
-	<div class='col-sm-12 col-md-4' >
-		<div class="panel panel-card">
-			<div class="panel-title">
-				<h5 class='no-margin m-b'>Time of Day ~ Slouching</h5>
-			</div>
-			<div class="panel-body">
-				<div id="sensor-cpu-donut-d3" style='height:370px;'></div>
-			</div>
-		</div>
-	</div>
-<!-- 
-	<div class='col-sm-12 col-md-6'>
-		<div class="panel panel-card">
-			<div class="panel-title">
-				<h5 class='no-margin m-b'>Sensor Network Monitor</h5>
-			</div>
-			<div class="panel-body">
-				<div id="sensor-net-area-d3" style="height:280px;"></div>
-			</div>
-		</div>
-	</div>
-
-	<div class='col-sm-12 col-md-6'>
-		<div class="panel panel-card">
-			<div class="panel-title">
-				<h5 class='no-margin m-b'>Sensor Disk IO Monitor</h5>
-			</div>
-			<div class="panel-body">
-				<div id="sensor-disk-multi-d3" style="height:280px;"></div>
-			</div>
-		</div>
-	</div>
--->
-
-<!-- ================================= fan chart =================================
-	<div class='col-sm-12 col-md-4'>
-		<div class="panel panel-card">
-			<div class="panel-title">
-				<h5 class='no-margin m-b'>Sensor Location</h5>
-			</div>
-			<div class="panel-body">
-				<div id="sensor-moni-arcpie-d3" style="height:247px;"></div>
-			</div>
-		</div>
-	</div> -->
-
-<!-- ============================ time sequence chart ============================    
-	<div class='col-sm-12 col-md-8'>
-		<div class="panel panel-card">
-			<div class="panel-title">
-				<h5 class='no-margin m-b'>Sensor: People Distance and Duration Monitor</h5>
-			</div>
-			<div class="panel-body">
-				<div id="sensor-dis-dur-timeline-d3" style="height:247px;"></div>
-			</div>
-		</div>
-	</div> -->
-	
-	
-	<!-- 
-	<div class='col-sm-12 col-md-6'>
-		<div class="panel panel-card">
-			<div class="panel-title">
-				<h5 class='no-margin m-b'>Sensor Detection Monitor</h5>
-			</div>
-			<div class="panel-body">
-				<div id="sensor-detec-aster-d3" style="height:300px;"></div>
-			</div>
-		</div>
-	</div>
-	<div class='col-sm-12 col-md-6'>
-		<div class="panel panel-card">
-			<div class="panel-title">
-				<h5 class='no-margin m-b'>Sensor Latency Monitor</h5>
-			</div>
-			<div class="panel-body">
-				<div id="sensor-detec-aster2-d3" style="height:300px;"></div>
-			</div>
-		</div>
-	</div>
-	<div class='col-sm-12 col-md-12'>
-		<div class="panel panel-card">
-			<div class="panel-title">
-				<h5 class='no-margin m-b'>Sensor People Counting Monitor</h5>
-			</div>
-			<div class="panel-body">
-				<div id="sensor-count-multi-d3" style="height:400px;"></div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class='container'>
-
-	<div class="col-sm-12 col-md-12">
-		<h3>DOCKER PART</h3>
-	</div>
-
-	<div class='col-sm-12 col-md-4'>
-		<div class="panel panel-card">
-			<div class="panel-title">
-				<h5 class='no-margin m-b'>Docker CPU Monitor</h5>
-			</div>
-			<div class="panel-body">
-				<div id="docker-cpu-rect-d3" style="height:280px;"></div>
-			</div>
-		</div>
-	</div>
-
-	<div class='col-sm-12 col-md-8'>
-		<div class="panel panel-card">
-			<div class="panel-title">
-				<h5 class='no-margin m-b'>Sensor Memory Monitor</h5>
-			</div>
-			<div class="panel-body">
-				<div id="docker-mem-area-d3" style="height:280px;"></div>
-			</div>
-		</div>
-	</div>
-
-</div>
--->
-<div class='container'>
-	<div class="col-sm-12 col-md-12">
-		<h3>Project Info</h3>
-	</div>
-	<div class="col-sm-12 col-md-12">
-		<div class="panel panel-card">
-			<div class='panel-title'>
-				<h5 class='no-margin m-b'></h5>
-			</div>
-			<div class="panel-body">
-				<p>blah blah blah.</p>
-			</div>
-		</div>
-	</div>
-
-</div>
-
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<script src='./javascripts/scatter3d.js'></script>
-<script src='./javascripts/d3.v3.min.js'></script>
-<script src='./javascripts/jquery.min.js'></script>
-<script src='./javascripts/bootstrap.min.js'></script>
-<script src='./javascripts/vue.min.js'></script>
-<script src='./javascripts/integrateIndex.js'></script>
-    
-<!--<script src='./javascripts/experimentIndex.js'></script>-->
+    <div class='container'>
+        <div class="col-sm-12 col-md-12"> <img src="img/logo.png" alt="logo" height="80" style="padding:10px 0 10px">
+            <p></p>
+        </div>
+    </div>
+    <br>
+    <div class='container'>
+        <div class="col-sm-12 col-md-4">
+            <div class="panel panel-card people-panel">
+                <div class="panel-title">
+                    <h5>Monitoring posture... {{people_count}}</h5>
+                    <h1 id="slouching"></h1>
+                </div>
+                <div class="panel-body">
+                    <div id="sensor-moni-text">
+                        <h2 class="no-margin" align="center">{{sensor_status_bar}} | {{stand_or_sit}}</h2> </div>
+                </div>
+            </div>
+        </div>
+        <div class='col-sm-12 col-md-8'>
+            <div class="panel panel-card">
+                <div class="panel-title">
+                    <h5 class='no-margin m-b'>Activeness Monitor</h5> </div>
+                <div class="panel-body">
+                    <div id="sensor-mem-area-d3" style="height:270px;"></div>
+                </div>
+            </div>
+        </div>
+        <!-- ================================= pie chart ================================= -->
+    </div>
+    <div class='container'>
+        <div class='col-sm-12 col-md-4'>
+            <div class="panel panel-card">
+                <div class="panel-title">
+                    <h5 class='no-margin m-b'>During the past 24 hours...</h5> </div>
+                <div class="panel-body">
+                    <div id="sensor-cpu-donut-d3" style='height:370px;'></div>
+                </div>
+            </div>
+        </div>
+        <!-- ================================= coordinate points chart ================================= -->
+        <div class='col-sm-12 col-md-8'>
+            <div class="panel panel-card">
+                <div class="panel-title">
+                    <h5 class='no-margin m-b'>Spinal Position Monitor</h5> </div>
+                <div class="panel-body">
+                    <div class='col-xm-2 col-sm-2 col-md-2 panel-checkbox hidden-xs hidden-sm'>
+                        <p>Spinal Segments:</p>
+                        <form id='checkbox_opt'>
+                            <input id="spinal_seg1" class="scatter_checkbox" type="checkbox" name="spinal_seg1" value="1" v-on="click:checkOpt" checked="true" />
+                            <text> head </text>
+                            <br>
+                            <input id="spinal_seg2" class="scatter_checkbox" type="checkbox" name="spinal_seg2" value="2" v-on="click:checkOpt" checked="true" />
+                            <text> neck </text>
+                            <br>
+                            <input id="spinal_seg3" class="scatter_checkbox" type="checkbox" name="spinal_seg3" value="3" v-on="click:checkOpt" />
+                            <text> torso </text>
+                            <br>
+                            <input id="spinal_seg4" class="scatter_checkbox" type="checkbox" name="spinal_seg4" value="4" v-on="click:checkOpt" checked="true" />
+                            <text> left shoulder </text>
+                            <br>
+                            <input id="spinal_seg5" class="scatter_checkbox" type="checkbox" name="spinal_seg5" value="5" v-on="click:checkOpt" checked="true" />
+                            <text> right shoulder </text>
+                            <br>
+                            <input id="spinal_seg6" class="scatter_checkbox" type="checkbox" name="spinal_seg6" value="6" v-on="click:checkOpt" />
+                            <text> left hip </text>
+                            <br>
+                            <input id="spinal_seg7" class="scatter_checkbox" type="checkbox" name="spinal_seg7" value="7" v-on="click:checkOpt" />
+                            <text> right hip </text>
+                            <br>
+                            <input id="spinal_seg8" class="scatter_checkbox" type="checkbox" name="spinal_seg8" value="8" v-on="click:checkOpt" />
+                            <text> left knee </text>
+                            <br>
+                            <input id="spinal_seg9" class="scatter_checkbox" type="checkbox" name="spinal_seg9" value="9" v-on="click:checkOpt" checked="true" />
+                            <text> right knee </text>
+                            <br>
+                            <input id="spinal_seg10" class="scatter_checkbox" type="checkbox" name="spinal_seg10" value="10" v-on="click:checkOpt" />
+                            <text> left foot </text>
+                            <br>
+                            <input id="spinal_seg11" class="scatter_checkbox" type="checkbox" name="spinal_seg11" value="11" v-on="click:checkOpt" />
+                            <text> right foot </text>
+                            <br> </form>
+                    </div>
+                    <div class='panel-checkbox-xs visible-xs-block visible-sm-block'>
+                        <p>Spinal Segments:</p>
+                        <form id='checkbox_opt'>
+                            <input id="spinal_seg1" class="scatter_checkbox" type="checkbox" name="spinal_seg1" value="1" v-on="click:checkOpt" checked="true" />
+                            <text> head </text>
+                            <br>
+                            <input id="spinal_seg2" class="scatter_checkbox" type="checkbox" name="spinal_seg2" value="2" v-on="click:checkOpt" checked="true" />
+                            <text> neck </text>
+                            <br>
+                            <input id="spinal_seg3" class="scatter_checkbox" type="checkbox" name="spinal_seg3" value="3" v-on="click:checkOpt" />
+                            <text> torso </text>
+                            <br>
+                            <input id="spinal_seg4" class="scatter_checkbox" type="checkbox" name="spinal_seg4" value="4" v-on="click:checkOpt" checked="true" />
+                            <text> left shoulder </text>
+                            <br>
+                            <input id="spinal_seg5" class="scatter_checkbox" type="checkbox" name="spinal_seg5" value="5" v-on="click:checkOpt" checked="true" />
+                            <text> right shoulder </text>
+                            <br>
+                            <input id="spinal_seg6" class="scatter_checkbox" type="checkbox" name="spinal_seg6" value="6" v-on="click:checkOpt" />
+                            <text> left hip </text>
+                            <br>
+                            <input id="spinal_seg7" class="scatter_checkbox" type="checkbox" name="spinal_seg7" value="7" v-on="click:checkOpt" />
+                            <text> right hip </text>
+                            <br>
+                            <input id="spinal_seg8" class="scatter_checkbox" type="checkbox" name="spinal_seg8" value="8" v-on="click:checkOpt" />
+                            <text> left knee </text>
+                            <br>
+                            <input id="spinal_seg9" class="scatter_checkbox" type="checkbox" name="spinal_seg9" value="9" v-on="click:checkOpt" checked="true" />
+                            <text> right knee </text>
+                            <br>
+                            <input id="spinal_seg10" class="scatter_checkbox" type="checkbox" name="spinal_seg10" value="10" v-on="click:checkOpt" />
+                            <text> left foot </text>
+                            <br>
+                            <input id="spinal_seg11" class="scatter_checkbox" type="checkbox" name="spinal_seg11" value="11" v-on="click:checkOpt" />
+                            <text> right foot </text>
+                            <br> </form>
+                    </div>
+                    <div class='col-xm-12 col-sm-12 col-md-10 col-xs-12'>
+                        <div id="sensor-docker-scatterplot-d3" style="width:100%;height:370px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='container'>
+        <div class="col-sm-12 col-md-12">
+            <h3>Project Info</h3> </div>
+        <div class="col-sm-12 col-md-12">
+            <div class="panel panel-card">
+                <div class='panel-title'>
+                    <h5 class='no-margin m-b'></h5> </div>
+                <div class="panel-body">
+                    <p>This is the companion website of a class project for 15-821 Mobile and Pervasive computing at Carnegie Mellon University, in which we aim to provide real-time body posture information, detect bad spinal positions such as slouching, and couch senoirs to prevent osteoporosis as well as other chronic diseases. We collect spinal status data with Kinect and a BNO055 Adafruit 9-DOF absolute orientation sensor.</p>
+                    <p>https://github.com/yang-qian/Posture-Visualization-with-Processing-and-Kinect</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src='./javascripts/scatter3d.js'></script>
+    <script src='./javascripts/d3.v3.min.js'></script>
+    <script src='./javascripts/jquery.min.js'></script>
+    <script src='./javascripts/bootstrap.min.js'></script>
+    <script src='./javascripts/vue.min.js'></script>
+    <script src='./javascripts/integrateIndex.js'></script>
 </body>
+
 </html>
