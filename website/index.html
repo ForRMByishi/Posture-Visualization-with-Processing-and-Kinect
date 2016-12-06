@@ -11,7 +11,7 @@
 <body id='table'>
 <div class='container'>
 	<div class="col-sm-12 col-md-12">
-		<h1>Spine Monitor</h1>
+		<img src="img/logo.png" alt="logo" height="80" style="padding:10px 0 10px"> 
 		<p></p>
 	</div>
 </div>
@@ -47,61 +47,62 @@
 		</div>
 	</div>
 
+<!-- ================================= coordinate points chart ================================= -->
 	<div class='col-sm-12 col-md-8'>
 		<div class="panel panel-card">
 			<div class="panel-title">
 				<h5 class='no-margin m-b'>Spinal Position Monitor</h5>
 			</div>
+            <!-- 3D coordinates
+            <div class="panel-body">
+                <div id="myDiv" style="height:370px;">
+                </div>  
+            </div> -->
+            
+            
 			<div class="panel-body">
 				<div class='col-xm-2 col-sm-2 col-md-2 panel-checkbox hidden-xs hidden-sm'>
 					<p>Spinal Segments:</p>
 					<form id='checkbox_opt'>
-						<input id="issue1" class="scatter_checkbox" type="checkbox" name="issue1" value="1" v-on="click:checkOpt" checked="true"/><text> Segment 1</text><br>
-						<input id="issue2" class="scatter_checkbox" type="checkbox" name="issue2" value="2" v-on="click:checkOpt" checked="true"/><text> Segment 2</text><br>
-						<input id="issue3" class="scatter_checkbox" type="checkbox" name="issue3" value="3" v-on="click:checkOpt"/><text> Segment 3</text><br>
-						<input id="issue4" class="scatter_checkbox" type="checkbox" name="issue4" value="4" v-on="click:checkOpt" checked="true"/><text> Segment 4</text><br>
-						<input id="issue5" class="scatter_checkbox" type="checkbox" name="issue5" value="5" v-on="click:checkOpt" checked="true"/><text> Segment 5</text><br>
-						<input id="issue6" class="scatter_checkbox" type="checkbox" name="issue6" value="6" v-on="click:checkOpt"/><text> Segment 6</text><br>
-						<input id="issue7" class="scatter_checkbox" type="checkbox" name="issue7" value="7" v-on="click:checkOpt"/><text> Segment 7</text><br>
-						<input id="issue8" class="scatter_checkbox" type="checkbox" name="issue8" value="8" v-on="click:checkOpt"/><text> Segment 8</text><br>
-						<input id="issue9" class="scatter_checkbox" type="checkbox" name="issue9" value="9" v-on="click:checkOpt" checked="true"/><text> Segment 9</text><br>
-						<input id="issue10" class="scatter_checkbox" type="checkbox" name="issue10" value="10" v-on="click:checkOpt"/><text> Segment 10</text><br>
-						<input id="issue11" class="scatter_checkbox" type="checkbox" name="issue11" value="11" v-on="click:checkOpt"/><text> Segment 11</text><br>
-						<input id="issue12" class="scatter_checkbox" type="checkbox" name="issue12" value="12" v-on="click:checkOpt"/><text> Segment 12</text><br>
-						<input id="issue13" class="scatter_checkbox" type="checkbox" name="issue13" value="13" v-on="click:checkOpt"/><text> Segment 13</text><br>
-						<input id="issue14" class="scatter_checkbox" type="checkbox" name="issue14" value="14" v-on="click:checkOpt"/><text> Segment 14</text><br>
-						<input id="issue15" class="scatter_checkbox" type="checkbox" name="issue15" value="15" v-on="click:checkOpt"/><text> Segment 15</text><br>
+						<input id="spinal_seg1" class="scatter_checkbox" type="checkbox" name="spinal_seg1" value="1" v-on="click:checkOpt" checked="true"/><text> head </text><br>
+						<input id="spinal_seg2" class="scatter_checkbox" type="checkbox" name="spinal_seg2" value="2" v-on="click:checkOpt" checked="true"/><text> neck </text><br>
+						<input id="spinal_seg3" class="scatter_checkbox" type="checkbox" name="spinal_seg3" value="3" v-on="click:checkOpt"/><text> torso </text><br>
+						<input id="spinal_seg4" class="scatter_checkbox" type="checkbox" name="spinal_seg4" value="4" v-on="click:checkOpt" checked="true"/><text> left shoulder </text><br>
+						<input id="spinal_seg5" class="scatter_checkbox" type="checkbox" name="spinal_seg5" value="5" v-on="click:checkOpt" checked="true"/><text> right shoulder </text><br>
+						<input id="spinal_seg6" class="scatter_checkbox" type="checkbox" name="spinal_seg6" value="6" v-on="click:checkOpt"/><text> left hip </text><br>
+						<input id="spinal_seg7" class="scatter_checkbox" type="checkbox" name="spinal_seg7" value="7" v-on="click:checkOpt"/><text> right hip </text><br>
+						<input id="spinal_seg8" class="scatter_checkbox" type="checkbox" name="spinal_seg8" value="8" v-on="click:checkOpt"/><text> left knee </text><br>
+						<input id="spinal_seg9" class="scatter_checkbox" type="checkbox" name="spinal_seg9" value="9" v-on="click:checkOpt" checked="true"/><text> right knee </text><br>
+						<input id="spinal_seg10" class="scatter_checkbox" type="checkbox" name="spinal_seg10" value="10" v-on="click:checkOpt"/><text> left foot </text><br>
+						<input id="spinal_seg11" class="scatter_checkbox" type="checkbox" name="spinal_seg11" value="11" v-on="click:checkOpt"/><text> right foot </text><br>
 					</form>
 				</div>
 
 				<div class='panel-checkbox-xs visible-xs-block visible-sm-block'>
 					<p>Spinal Segments:</p>
 					<form id='checkbox_opt'>
-						<input id="issue1" class="scatter_checkbox" type="checkbox" name="issue1" value="1" v-on="click:checkOpt" checked="true"/><text> Segment 1</text>
-						<input id="issue2" class="scatter_checkbox" type="checkbox" name="issue2" value="2" v-on="click:checkOpt" checked="true"/><text> Segment 2</text>
-						<input id="issue3" class="scatter_checkbox" type="checkbox" name="issue3" value="3" v-on="click:checkOpt"/><text> Segment 3</text>
-						<input id="issue4" class="scatter_checkbox" type="checkbox" name="issue4" value="4" v-on="click:checkOpt" checked="true"/><text> Segment 4</text>
-						<input id="issue5" class="scatter_checkbox" type="checkbox" name="issue5" value="5" v-on="click:checkOpt" checked="true"/><text> Segment 5</text>
-						<input id="issue6" class="scatter_checkbox" type="checkbox" name="issue6" value="6" v-on="click:checkOpt"/><text> Segment 6</text>
-						<input id="issue7" class="scatter_checkbox" type="checkbox" name="issue7" value="7" v-on="click:checkOpt"/><text> Segment 7</text>
-						<input id="issue8" class="scatter_checkbox" type="checkbox" name="issue8" value="8" v-on="click:checkOpt"/><text> Segment 8</text>
-						<input id="issue9" class="scatter_checkbox" type="checkbox" name="issue9" value="9" v-on="click:checkOpt" checked="true"/><text> Segment 9</text>
-						<input id="issue10" class="scatter_checkbox" type="checkbox" name="issue10" value="10" v-on="click:checkOpt"/><text> Segment 10</text>
-						<input id="issue11" class="scatter_checkbox" type="checkbox" name="issue11" value="11" v-on="click:checkOpt"/><text> Segment 11</text>
-						<input id="issue12" class="scatter_checkbox" type="checkbox" name="issue12" value="12" v-on="click:checkOpt"/><text> Segment 12</text>
-						<input id="issue13" class="scatter_checkbox" type="checkbox" name="issue13" value="13" v-on="click:checkOpt"/><text> Segment 13</text>
-						<input id="issue14" class="scatter_checkbox" type="checkbox" name="issue14" value="14" v-on="click:checkOpt"/><text> Segment 14</text>
-						<input id="issue15" class="scatter_checkbox" type="checkbox" name="issue15" value="15" v-on="click:checkOpt"/><text> Segment 15</text>
+						<input id="spinal_seg1" class="scatter_checkbox" type="checkbox" name="spinal_seg1" value="1" v-on="click:checkOpt" checked="true"/><text> head </text><br>
+						<input id="spinal_seg2" class="scatter_checkbox" type="checkbox" name="spinal_seg2" value="2" v-on="click:checkOpt" checked="true"/><text> neck </text><br>
+						<input id="spinal_seg3" class="scatter_checkbox" type="checkbox" name="spinal_seg3" value="3" v-on="click:checkOpt"/><text> torso </text><br>
+						<input id="spinal_seg4" class="scatter_checkbox" type="checkbox" name="spinal_seg4" value="4" v-on="click:checkOpt" checked="true"/><text> left shoulder </text><br>
+						<input id="spinal_seg5" class="scatter_checkbox" type="checkbox" name="spinal_seg5" value="5" v-on="click:checkOpt" checked="true"/><text> right shoulder </text><br>
+						<input id="spinal_seg6" class="scatter_checkbox" type="checkbox" name="spinal_seg6" value="6" v-on="click:checkOpt"/><text> left hip </text><br>
+						<input id="spinal_seg7" class="scatter_checkbox" type="checkbox" name="spinal_seg7" value="7" v-on="click:checkOpt"/><text> right hip </text><br>
+						<input id="spinal_seg8" class="scatter_checkbox" type="checkbox" name="spinal_seg8" value="8" v-on="click:checkOpt"/><text> left knee </text><br>
+						<input id="spinal_seg9" class="scatter_checkbox" type="checkbox" name="spinal_seg9" value="9" v-on="click:checkOpt" checked="true"/><text> right knee </text><br>
+						<input id="spinal_seg10" class="scatter_checkbox" type="checkbox" name="spinal_seg10" value="10" v-on="click:checkOpt"/><text> left foot </text><br>
+						<input id="spinal_seg11" class="scatter_checkbox" type="checkbox" name="spinal_seg11" value="11" v-on="click:checkOpt"/><text> right foot </text><br>
 					</form>
 				</div>
 
 				<div class='col-xm-12 col-sm-12 col-md-10 col-xs-12'>
 					<div id="sensor-docker-scatterplot-d3" style="width:100%;height:370px;"></div>
 				</div>
-			</div>
+			</div> 
 		</div>
 	</div>
-
+    
+<!-- ================================= pie chart ================================= -->
 	<div class='col-sm-12 col-md-4' >
 		<div class="panel panel-card">
 			<div class="panel-title">
@@ -135,6 +136,8 @@
 		</div>
 	</div>
 -->
+
+<!-- ================================= fan chart =================================
 	<div class='col-sm-12 col-md-4'>
 		<div class="panel panel-card">
 			<div class="panel-title">
@@ -144,8 +147,9 @@
 				<div id="sensor-moni-arcpie-d3" style="height:247px;"></div>
 			</div>
 		</div>
-	</div>
+	</div> -->
 
+<!-- ============================ time sequence chart ============================    
 	<div class='col-sm-12 col-md-8'>
 		<div class="panel panel-card">
 			<div class="panel-title">
@@ -155,7 +159,7 @@
 				<div id="sensor-dis-dur-timeline-d3" style="height:247px;"></div>
 			</div>
 		</div>
-	</div>
+	</div> -->
 	
 	
 	<!-- 
@@ -238,12 +242,14 @@
 
 </div>
 
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src='./javascripts/scatter3d.js'></script>
 <script src='./javascripts/d3.v3.min.js'></script>
 <script src='./javascripts/jquery.min.js'></script>
 <script src='./javascripts/bootstrap.min.js'></script>
 <script src='./javascripts/vue.min.js'></script>
-
 <script src='./javascripts/integrateIndex.js'></script>
+    
 <!--<script src='./javascripts/experimentIndex.js'></script>-->
 </body>
 </html>

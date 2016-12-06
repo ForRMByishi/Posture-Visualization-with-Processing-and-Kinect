@@ -3,8 +3,8 @@ var demo = new Vue({
   el: '#table',
   data: {
     people_count: 0,
-    scatterCategory: ['issue1', 'issue2', 'issue3', 'issue4', 'issue5', 'issue6', 'issue7', 'issue8', 'issue9', 'issue10', 'issue11', 'issue12', 'issue13', 'issue14', 'issue15'],
-    selectScaCate: ['issue1', 'issue2', 'issue4', 'issue5', 'issue9'],
+    scatterCategory: ['spinal_seg1', 'spinal_seg2', 'spinal_seg3', 'spinal_seg4', 'spinal_seg5', 'spinal_seg6', 'spinal_seg7', 'spinal_seg8', 'spinal_seg9', 'spinal_seg10', 'spinal_seg11', 'spinal_seg12', 'spinal_seg13', 'spinal_seg14', 'spinal_seg15'],
+    selectScaCate: ['spinal_seg1', 'spinal_seg2', 'spinal_seg4', 'spinal_seg5', 'spinal_seg9'],
     sensorDockerFunc: null
   },
   methods: {
@@ -341,17 +341,30 @@ var demo = new Vue({
     },
     displayDocker: function () {
       var self = this;
-
+    
+      // read from json
+      var data_str = "1.5,2.5,3.5,4.5,5.5,6.5";
+      var data = data_str.split(",")
+      
+      function getcoordinates(str) {
+          var Ys = str.split(","), i, output = '';
+          for (i = 0; i < myData.length; i += 1) {
+              for (key in myData[i]) {
+                  output += key + " : " + myData[i][key];
+              } 
+          }
+     return output;}
+      
       var data = [
-        {time:'10:00', issue1:15.1, issue2: 13, issue3: 2, issue4: 3, issue5: 10, issue6: 8, issue7: 4, issue8: 5, issue9: 6, issue10: 11, issue11:1, issue12: 15, issue13: 7, issue14: 9, issue15: 12, issue16: 18, issue17: 16, issue18: 19, issue19: 2, issue20: 16 },
-        {time:'10:01', issue1:15.1, issue2: 13, issue3: 2, issue4: 3, issue5: 10, issue6: 8, issue7: 3, issue8: 2, issue9: 2, issue10: 8, issue11:14, issue12: 13, issue13: 12, issue14: 3, issue15: 10, issue16: 18, issue17: 3, issue18: 2, issue19: 2, issue20: 16 },
-        {time:'10:02', issue1:15.1, issue2: 13, issue3: 2, issue4: 3, issue5: 10, issue6: 8, issue7: 3, issue8: 2, issue9: 2, issue10: 8, issue11:14, issue12: 13, issue13: 12, issue14: 3, issue15: 10, issue16: 18, issue17: 3, issue18: 2, issue19: 2, issue20: 16 },
-        {time:'10:03', issue1:15.1, issue2: 13, issue3: 2, issue4: 3, issue5: 10, issue6: 8, issue7: 3, issue8: 2, issue9: 2, issue10: 8, issue11:14, issue12: 13, issue13: 12, issue14: 3, issue15: 10, issue16: 18, issue17: 3, issue18: 2, issue19: 2, issue20: 16 },
-        {time:'10:04', issue1:15.1, issue2: 13, issue3: 2, issue4: 3, issue5: 10, issue6: 8, issue7: 3, issue8: 2, issue9: 2, issue10: 8, issue11:14, issue12: 13, issue13: 12, issue14: 3, issue15: 10, issue16: 18, issue17: 3, issue18: 2, issue19: 2, issue20: 16 },
-        {time:'10:05', issue1:14, issue2: 13, issue3: 2, issue4: 3, issue5: 10, issue6: 8, issue7: 3, issue8: 2, issue9: 2, issue10: 8, issue11:14, issue12: 13, issue13: 12, issue14: 3, issue15: 10, issue16: 18, issue17: 3, issue18: 2, issue19: 2, issue20: 16 },
-        {time:'10:06', issue1:14, issue2: 13, issue3: 2, issue4: 3, issue5: 10, issue6: 8, issue7: 3, issue8: 2, issue9: 2, issue10: 8, issue11:14, issue12: 13, issue13: 12, issue14: 3, issue15: 10, issue16: 18, issue17: 3, issue18: 2, issue19: 2, issue20: 16 },
-        {time:'10:07', issue1:14, issue2: 13, issue3: 2, issue4: 3, issue5: 10, issue6: 8, issue7: 3, issue8: 2, issue9: 2, issue10: 8, issue11:14, issue12: 13, issue13: 12, issue14: 3, issue15: 10, issue16: 18, issue17: 3, issue18: 2, issue19: 2, issue20: 16 },
-        {time:'10:08', issue1:14, issue2: 13, issue3: 2, issue4: 3, issue5: 10, issue6: 8, issue7: 3, issue8: 2, issue9: 2, issue10: 8, issue11:14, issue12: 13, issue13: 12, issue14: 3, issue15: 10, issue16: 18, issue17: 3, issue18: 2, issue19: 2, issue20: 16 }
+        {time:'10:00', spinal_seg1:15.1, spinal_seg2: 13, spinal_seg3: 2, spinal_seg4: 3, spinal_seg5: 10, spinal_seg6: 8, spinal_seg7: 4, spinal_seg8: 5, spinal_seg9: 6, spinal_seg10: 11, spinal_seg11:1, spinal_seg12: 15, spinal_seg13: 7, spinal_seg14: 9, spinal_seg15: 12, spinal_seg16: 18, spinal_seg17: 16, spinal_seg18: 19, spinal_seg19: 2, spinal_seg20: 16 },
+        {time:'10:01', spinal_seg1:15.1, spinal_seg2: 13, spinal_seg3: 2, spinal_seg4: 3, spinal_seg5: 10, spinal_seg6: 8, spinal_seg7: 3, spinal_seg8: 2, spinal_seg9: 2, spinal_seg10: 8, spinal_seg11:14, spinal_seg12: 13, spinal_seg13: 12, spinal_seg14: 3, spinal_seg15: 10, spinal_seg16: 18, spinal_seg17: 3, spinal_seg18: 2, spinal_seg19: 2, spinal_seg20: 16 },
+        {time:'10:02', spinal_seg1:15.1, spinal_seg2: 13, spinal_seg3: 2, spinal_seg4: 3, spinal_seg5: 10, spinal_seg6: 8, spinal_seg7: 3, spinal_seg8: 2, spinal_seg9: 2, spinal_seg10: 8, spinal_seg11:14, spinal_seg12: 13, spinal_seg13: 12, spinal_seg14: 3, spinal_seg15: 10, spinal_seg16: 18, spinal_seg17: 3, spinal_seg18: 2, spinal_seg19: 2, spinal_seg20: 16 },
+        {time:'10:03', spinal_seg1:15.1, spinal_seg2: 13, spinal_seg3: 2, spinal_seg4: 3, spinal_seg5: 10, spinal_seg6: 8, spinal_seg7: 3, spinal_seg8: 2, spinal_seg9: 2, spinal_seg10: 8, spinal_seg11:14, spinal_seg12: 13, spinal_seg13: 12, spinal_seg14: 3, spinal_seg15: 10, spinal_seg16: 18, spinal_seg17: 3, spinal_seg18: 2, spinal_seg19: 2, spinal_seg20: 16 },
+        {time:'10:04', spinal_seg1:15.1, spinal_seg2: 13, spinal_seg3: 2, spinal_seg4: 3, spinal_seg5: 10, spinal_seg6: 8, spinal_seg7: 3, spinal_seg8: 2, spinal_seg9: 2, spinal_seg10: 8, spinal_seg11:14, spinal_seg12: 13, spinal_seg13: 12, spinal_seg14: 3, spinal_seg15: 10, spinal_seg16: 18, spinal_seg17: 3, spinal_seg18: 2, spinal_seg19: 2, spinal_seg20: 16 },
+        {time:'10:05', spinal_seg1:14, spinal_seg2: 13, spinal_seg3: 2, spinal_seg4: 3, spinal_seg5: 10, spinal_seg6: 8, spinal_seg7: 3, spinal_seg8: 2, spinal_seg9: 2, spinal_seg10: 8, spinal_seg11:14, spinal_seg12: 13, spinal_seg13: 12, spinal_seg14: 3, spinal_seg15: 10, spinal_seg16: 18, spinal_seg17: 3, spinal_seg18: 2, spinal_seg19: 2, spinal_seg20: 16 },
+        {time:'10:06', spinal_seg1:14, spinal_seg2: 13, spinal_seg3: 2, spinal_seg4: 3, spinal_seg5: 10, spinal_seg6: 8, spinal_seg7: 3, spinal_seg8: 2, spinal_seg9: 2, spinal_seg10: 8, spinal_seg11:14, spinal_seg12: 13, spinal_seg13: 12, spinal_seg14: 3, spinal_seg15: 10, spinal_seg16: 18, spinal_seg17: 3, spinal_seg18: 2, spinal_seg19: 2, spinal_seg20: 16 },
+        {time:'10:07', spinal_seg1:14, spinal_seg2: 13, spinal_seg3: 2, spinal_seg4: 3, spinal_seg5: 10, spinal_seg6: 8, spinal_seg7: 3, spinal_seg8: 2, spinal_seg9: 2, spinal_seg10: 8, spinal_seg11:14, spinal_seg12: 13, spinal_seg13: 12, spinal_seg14: 3, spinal_seg15: 10, spinal_seg16: 18, spinal_seg17: 3, spinal_seg18: 2, spinal_seg19: 2, spinal_seg20: 16 },
+        {time:'10:08', spinal_seg1:14, spinal_seg2: 13, spinal_seg3: 2, spinal_seg4: 3, spinal_seg5: 10, spinal_seg6: 8, spinal_seg7: 3, spinal_seg8: 2, spinal_seg9: 2, spinal_seg10: 8, spinal_seg11:14, spinal_seg12: 13, spinal_seg13: 12, spinal_seg14: 3, spinal_seg15: 10, spinal_seg16: 18, spinal_seg17: 3, spinal_seg18: 2, spinal_seg19: 2, spinal_seg20: 16 }
       ];
 
       var hAxis = 10, mAxis = 9;
@@ -380,7 +393,7 @@ var demo = new Vue({
         data.forEach(function(d) {
           for(var i=1; i<Object.keys(d).length; i++) {
             ddata.push({
-              'time': parseDate(d['time']), 'issue': self.scatterCategory[i-1], 'num': d['issue'+i]
+              'time': parseDate(d['time']), 'spinal_seg': self.scatterCategory[i-1], 'num': d['spinal_seg'+i]
             });
           }
         });
@@ -428,25 +441,25 @@ var demo = new Vue({
             .data(ddata)
             .enter()
             .append("circle")
-            .attr("class", function (d) { return "scatter_circle scatter_circle_" + d['issue']; })
+            .attr("class", function (d) { return "scatter_circle scatter_circle_" + d['spinal_seg']; })
             .attr("cx", function (d) { return x(d['time']); })
             .attr("cy", function (d) { return y(d['num']); })
             .attr("r", function (d) { return r(10); })
             .style("display", function (d) {
               //to check if the checkbox has been selected and decide whether to show it out
               //use display:none and display:inherit to control the display of scatter dots
-              if ($("#"+d['issue']).prop("checked"))
+              if ($("#"+d['spinal_seg']).prop("checked"))
                 return 'inherit';
               else
                 return 'none';
             })
-            .style("fill", function (d) { return color(d['issue']) })
+            .style("fill", function (d) { return color(d['spinal_seg']) })
             .on("mouseover", function (d) {
-              if ($("#"+d['issue']).prop("checked")) {
+              if ($("#"+d['spinal_seg']).prop("checked")) {
                 $(this).tooltip({
                   'container': 'body',
                   'placement': 'left',
-                  'title': d["issue"] + " | " +d['num'],
+                  'title': d["spinal_seg"] + " | " +d['num'],
                   'trigger': 'hover'
                 })
                     .tooltip('show');
@@ -543,8 +556,8 @@ var demo = new Vue({
           for(var i=1; i<Object.keys(d).length; i++) {
             ddata.push({
               'time': parseDate(d['time']),
-              'issue': self.scatterCategory[i-1],
-              'num': d['issue'+i]
+              'spinal_seg': self.scatterCategory[i-1],
+              'num': d['spinal_seg'+i]
             });
           }
         });
@@ -570,7 +583,7 @@ var demo = new Vue({
             .style("display", function (d) {
               //to check if the checkbox has been selected and decide whether to show it out
               //use display:none and display:inherit to control the display of scatter dots
-              if ($("#"+d['issue']).prop("checked"))
+              if ($("#"+d['spinal_seg']).prop("checked"))
                 return 'inherit';
               else
                 return 'none';
@@ -582,25 +595,25 @@ var demo = new Vue({
             .data(ddata)
             .enter()
             .append("circle")
-            .attr("class", function (d) { return "scatter_circle scatter_circle_" + d['issue']; })
+            .attr("class", function (d) { return "scatter_circle scatter_circle_" + d['spinal_seg']; })
             .attr("cx", function (d) { return x(d['time']); })
             .attr("cy", function (d) { return y(d['num']); })
             .attr("r", function (d) { return r(10); })
             .style("display", function (d) {
               //to check if the checkbox has been selected and decide whether to show it out
               //use display:none and display:inherit to control the display of scatter dots
-              if ($("#"+d['issue']).prop("checked"))
+              if ($("#"+d['spinal_seg']).prop("checked"))
                 return 'inherit';
               else
                 return 'none';
             })
-            .style("fill", function (d) { return color(d['issue']) })
+            .style("fill", function (d) { return color(d['spinal_seg']) })
             .on("mouseover", function (d) {
-              if ($("#"+d['issue']).prop("checked")) {
+              if ($("#"+d['spinal_seg']).prop("checked")) {
                 $(this).tooltip({
                   'container': 'body',
                   'placement': 'left',
-                  'title': d["issue"] + " | " +d['num'],
+                  'title': d["spinal_seg"] + " | " +d['num'],
                   'trigger': 'hover'
                 })
                     .tooltip('show');
@@ -630,26 +643,20 @@ var demo = new Vue({
         //update donut data
         data.push({
           time: hAxis + ":" + mAxis,
-          issue1: Math.floor(Math.random()*20),
-          issue2: Math.floor(Math.random()*20),
-          issue3: Math.floor(Math.random()*20),
-          issue4: Math.floor(Math.random()*20),
-          issue5: Math.floor(Math.random()*20),
-          issue6: Math.floor(Math.random()*20),
-          issue7: Math.floor(Math.random()*20),
-          issue8: Math.floor(Math.random()*20),
-          issue9: Math.floor(Math.random()*20),
-          issue10: Math.floor(Math.random()*20),
-          issue11: Math.floor(Math.random()*20),
-          issue12: Math.floor(Math.random()*20),
-          issue13: Math.floor(Math.random()*20),
-          issue14: Math.floor(Math.random()*20),
-          issue15: Math.floor(Math.random()*20),
-          issue16: Math.floor(Math.random()*20),
-          issue17: Math.floor(Math.random()*20),
-          issue18: Math.floor(Math.random()*20),
-          issue19: Math.floor(Math.random()*20),
-          issue20: Math.floor(Math.random()*20)
+          spinal_seg1: Math.floor(Math.random()*20),
+          spinal_seg2: Math.floor(Math.random()*20),
+          spinal_seg3: Math.floor(Math.random()*20),
+          spinal_seg4: Math.floor(Math.random()*20),
+          spinal_seg5: Math.floor(Math.random()*20),
+          spinal_seg6: Math.floor(Math.random()*20),
+          spinal_seg7: Math.floor(Math.random()*20),
+          spinal_seg8: Math.floor(Math.random()*20),
+          spinal_seg9: Math.floor(Math.random()*20),
+          spinal_seg10: Math.floor(Math.random()*20),
+          spinal_seg11: Math.floor(Math.random()*20),
+          spinal_seg12: Math.floor(Math.random()*20),
+          spinal_seg13: Math.floor(Math.random()*20),
+          spinal_seg14: Math.floor(Math.random()*20),
         });
 
         if(mAxis === 59) {
