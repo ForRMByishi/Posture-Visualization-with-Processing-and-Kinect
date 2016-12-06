@@ -1,21 +1,9 @@
-/* *-*-*-*-*-* DEBUGGING INFORMATIONS *-*-*-*-*-* */
-
 
 void draw_logo(){
-  logo.disableStyle();  // Ignore the colors in the SVG
-  fill(getRandomColor()); 
-  shape(logo,20,20,15,15/logo.width*logo.height);
-  
-  translate(logo.width, 15/logo.width*logo.height/2 - 8);
-  
-  textFont(title_font);
-  textSize(8);
-  //fill(getRandomColor());
-  text("spine coach", 10, textWidth("spine coach"));
+  image(logo_png, 20, 20, logo_png.width/10, logo_png.height/10);
 }
 
-
-/* Display  informations to debug */
+/* *-*-*-*-*-* DEBUGGING INFORMATIONS *-*-*-*-*-* */
  
 void displayInfo(boolean active) {
   if(active == true) {

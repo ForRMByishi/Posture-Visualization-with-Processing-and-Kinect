@@ -18,10 +18,7 @@ void touchbutton()
   for (int i = 0; i < depthPoints.length; i+=10) 
   {
     PVector currentPoint = depthPoints[i];
-    
-    // set the stroke color based on the color pixel
-    //stroke(rgbImage.pixels[i]);
-    
+
     // The nested if statements inside of our loop 2
     if (currentPoint.x > boxCenter.x - boxSize/2 && currentPoint.x < boxCenter.x + boxSize/2)
     {
@@ -36,7 +33,6 @@ void touchbutton()
     point(currentPoint.x, currentPoint.y, currentPoint.z);
   }
   
-  
   // set the box color's transparency
   // 0 is transparent, 1000 points is fully opaque red
   float boxAlpha = map(depthPointsInBox, 0, 1000, 0, 255);
@@ -47,22 +43,23 @@ void touchbutton()
   // save current status for next time
   wasJustInBox = isInBox; 
   translate(boxCenter.x, boxCenter.y, boxCenter.z);
-  fill(255, 0, 0, boxAlpha);
-  stroke(255, 0, 0);
+  //println(boxAlpha);
+  fill(255, 255, 255, boxAlpha);
+  stroke(255,255,255);
+  strokeWeight(1);
   box(boxSize/5);
   
-  println("depth", depthPointsInBox);
+  //println("depth", depthPointsInBox);
   if (depthPointsInBox > 350){
     touch_timer += 1;
-    println(">450");
+    //println(">450");
   } else {
-    println("cleared when timer is", touch_timer);
+    //println("cleared when timer is", touch_timer);
     touch_timer = 0;
   }
   
-  if (touch_timer > 5){
-    touch_timer = 0;
-    println("triggered!");
-    link("http://www.google.com");
+  if (touch_timer > 30){
+    touch_timer = -30000; // deactivate the button for 30sec once triggered
+    link("http://192.168.1.163:8080/webtool/");
   }
 }

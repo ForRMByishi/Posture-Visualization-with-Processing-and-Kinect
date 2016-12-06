@@ -18,7 +18,7 @@ Print when user is lost. Input is int userId of user lost
 ----------------------------------------------------------------*/
 void onLostUser(SimpleOpenNI curContext, int userId)
 {
-  println("onLostUser - userId: " + userId);
+  //println("onLostUser - userId: " + userId);
   visibleUser = false;
 }
 
@@ -27,6 +27,6 @@ Called when a user is tracked.
 ----------------------------------------------------------------*/
 void onVisibleUser(SimpleOpenNI curContext, int userId)
 {
-  println("visibleUser with userID :  " + userId);
+  //println("visibleUser with userID :  " + userId);
   visibleUser = true;
 }

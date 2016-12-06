@@ -1,8 +1,8 @@
 
 /* 
- 
- Qian Yang (qyang1@cs.cmu.edu)
- 
+ ## Posture Visualization with Processing and Kinect
+ ## Qian Yang (qyang1@cs.cmu.edu)
+ ## https://github.com/yang-qian/Posture-Visualization-with-Processing-and-Kinect
  */
 
 import processing.opengl.*; // opengl
@@ -18,12 +18,13 @@ import org.jbox2d.dynamics.*; // jbox2d
 import ddf.minim.*; // for touch
 import org.gicentre.utils.stat.*; // for static chart
 
+/* Variables for on-screen button */
 int timer;
 int touch_timer;
 int timeIntervalFlag = 3000; // 3 seconds because we are working with millis
 
 /* Variables for info display */
-PShape logo;
+PImage logo_png;
 PShape spine;
 PFont title_font;
 PFont f;
@@ -31,6 +32,7 @@ PFont f;
 /* Variables for static charts */
 BarChart barChart; //static barchart
 ArrayList<PVector> side_view_points; // for array point cloud
+int[] selected_joints = {0, 1, 2, 3, 4, 11, 12, 9, 10, 13, 14}; //joints to show in the side view graph
 
 /* Variables for Kinect Physics */
 // declare SimpleOpenNI object
@@ -52,7 +54,6 @@ int kinectHeight = 480;
 PImage cam = createImage(640, 480, RGB);
 // to center and rescale from 640x480 to higher custom resolutions
 float reScale;
-// background and blob color
 color bgColor, blobColor;
 // three color palettes (artifact from me storing many interesting color palettes as strings in an external data file ;-)
 String[] palettes = {
@@ -76,7 +77,6 @@ PVector head;
 boolean visibleUser;
 PVector converted_joint_from_limbID;
 PVector[] all_converted_joints = new PVector[15]; // an array of 15 joints' converted coordinates, which are...
-
 
 float textPosition;
 color[] userColor = new color[] { 
@@ -105,7 +105,7 @@ void setup() {
   timer = millis();
 
   //size(1024, 768, OPENGL);
-  size(1280, 900, P3D);
+  size(1024, 768, P3D);
 
   /* set up static charts */
   setup_bar_chart();
@@ -115,11 +115,13 @@ void setup() {
   kinect = new SkeletonKinect(this);
 
   /* set up info display */
-  logo = loadShape("logo.svg"); // width 100, height 125
+  logo_png = loadImage("logo_white.png");
+  
   spine = loadShape("spine.svg");
 
   /* set up display */
-  f = loadFont("Menlo-Regular-12.vlw");
+  //f = loadFont("Menlo-Regular-12.vlw");
+  f = loadFont("Corbel-48.vlw");
   title_font = loadFont("FiraSans-Hair-60.vlw");
 
   // set up corrdinates export to a csv file
@@ -196,7 +198,7 @@ void draw() {
 
   // update the SimpleOpenNI object
   kinect.update();
-
+  
   // * Put detected users in an IntVector
   IntVector userList = new IntVector();
   kinect.getUsers(userList);
@@ -215,7 +217,8 @@ void draw() {
     }
   }
   cam.updatePixels();
-
+  
+  
   // copy the image into the smaller blob image
   blobs.copy(cam, 0, 0, cam.width, cam.height, 0, 0, blobs.width, blobs.height);
   // blur the blob image
@@ -228,7 +231,7 @@ void draw() {
   poly.createPolygon();
   // create the box2d body from the polygon
   poly.createBody();
-  // update and draw everything (see method)
+  // update and draw everything
   updateAndDrawBox2D();
   // destroy the person's body (important!)
   poly.destroyBody();
@@ -244,11 +247,12 @@ void draw() {
       stroke(userColor[ randomColor ] );
       kinect.get_all_joints(userId);
       kinect.drawSkeleton(userId);
+      draw_side_view();
       // * Set to false to turn off success tracking message      
-      displaySuccess(true);
+      displaySuccess(false);
     } else {      
       // * Set to false to turn off error tracking message
-      displayError(true);         
+      displayError(false);         
       // * Each time the tracking is lost, change the random color value for the next tracking   
       randomColor = (int)random(0, userColor.length);
     }
@@ -256,54 +260,23 @@ void draw() {
 
   if ( millis() > timer + timeIntervalFlag ) {
     timer = millis();
-    // do sth every 3 sec
-    //draw_side_view();
+    // do sth every 3 se//draw_side_view();c
+    
   }
-
-  // * Set to false to turn off the debugging informations
+  
+  // * turn on/off the debugging information
   displayInfo(false);
+
+  // draw the static chart
+  //barChart.draw(20, 40, 100, 100);
+  
   draw_logo();
   
-  // draw the static chart
-  barChart.draw(20, 40, 100, 100);
-
   touchbutton();
+  
+  
+  
+  
 }
 
-void updateAndDrawBox2D() {
-  // if frameRate is sufficient, add a polygon and a circle with a random radius
-
-  if (frameRate > 30) {
-    CustomShape shape1 = new CustomShape(kinectWidth/2, -50, -1, BodyType.DYNAMIC) ;
-    CustomShape shape2 = new CustomShape(kinectWidth/2, -50, random(2.5, 20), BodyType.DYNAMIC);
-    polygons.add(shape1);
-    polygons.add(shape2);
-  }
-  // take one step in the box2d physics world
-  box2d.step();
-
-  // center and reScale from Kinect to custom dimensions
-  translate(0, (height-kinectHeight*reScale)/2);
-  scale(reScale);
-
-  // display the person's polygon  
-  stroke(153);
-  //noStroke();
-  fill(blobColor);
-  gfx.polygon2D(poly);
-
-  // display all the shapes (circles, polygons)
-  // go backwards to allow removal of shapes
-  for (int i=polygons.size ()-1; i>=0; i--) {
-    CustomShape cs = polygons.get(i);
-    // if the shape is off-screen remove it (see class for more info)
-    if (cs.done()) {
-      polygons.remove(i);
-      // otherwise update (keep shape outside person) and display (circle or polygon)
-    } else {
-      cs.update();
-      cs.display();
-    }
-  }
-}
 
